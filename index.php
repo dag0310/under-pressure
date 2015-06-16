@@ -36,6 +36,13 @@
     <link rel="stylesheet" href="main.css">
 </head>
 <body>
+    <form class="inputs" method="post" action="post_log.php">
+        <input type="number" id="sys" name="sys" placeholder="SYS [mmHg]">
+        <input type="number" id="dia" name="dia" placeholder="DIA [mmHg]">
+        <input type="number" id="pulse" name="pulse" placeholder="Pulse [1/min]">
+        <button type="submit">Log</button>
+    </form>
+   
     <div id="chart"></div>
     
     <!-- Scripts -->

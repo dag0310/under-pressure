@@ -18,3 +18,27 @@ html, body {
     border: none;
     text-shadow: none;
 }
+
+.inputs {
+    text-align: center;
+}
+.inputs input, .inputs button {
+    text-align: center;
+    border: none;
+    padding: 10px;
+    margin: 5px;
+    display: inline-block;
+    min-width: 50px;
+}
+.inputs input {
+    color: #222;
+}
+.inputs button[type=submit] {
+    background-color: gray;
+    color: white;
+    width: 100px;
+    font-weight: bold;
+}
+.inputs button[type=submit]:action {
+    background-color: darkgray;
+}
