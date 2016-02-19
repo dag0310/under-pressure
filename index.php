@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>Under Pressure</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <!-- Icon -->
@@ -36,14 +36,15 @@
     <link rel="stylesheet" href="main.css">
 </head>
 <body>
-    <form class="inputs" method="post" action="post_log.php">
-        <input type="number" id="sys" name="sys" placeholder="SYS [mmHg]">
-        <input type="number" id="dia" name="dia" placeholder="DIA [mmHg]">
-        <input type="number" id="pulse" name="pulse" placeholder="Pulse [1/min]">
+    <div id="chart"></div>
+    
+    <form method="post" action="post_log.php">
+        <input type="number" name="sys" placeholder="SYS">
+        <input type="number" name="dia" placeholder="DIA">
+        <input type="number" name="pulse" placeholder="Pulse">
+        <br>
         <button type="submit">Log</button>
     </form>
-   
-    <div id="chart"></div>
     
     <!-- Scripts -->
     <script src="vendor/jquery.min.js"></script>

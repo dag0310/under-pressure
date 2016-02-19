@@ -1,9 +1,13 @@
 (function() {
     'use strict';
-
+    
     addToHomescreen();
-
+    
     $(function () {
+        var WINDOW = $(window);
+        var CHART = $('#chart');
+        var FORM = $('form');
+        
         var chart = Morris.Line({
             element: 'chart',
             data: [],
@@ -16,14 +20,14 @@
             resize: true,
             continuousLine: true
         });
-
+        
         function round(number, decimalPlaces) {
             decimalPlaces = decimalPlaces ? decimalPlaces : 0;
             var factor = Math.pow(10, decimalPlaces);
             return Math.round(number * factor) / factor;
         }
-
-        function refresh() {
+        
+        function refreshChartData() {
             $.ajax({
                 type: 'GET',
                 cache: false,
@@ -45,10 +49,16 @@
                 alert('Log data could not be fetched :(');
             });
         }
-    
-        $(window).focus(function() {
-            refresh()
-        });
-        refresh();
+        
+        function updateHeights() {
+            var newChartHeight = WINDOW.innerHeight() - FORM.innerHeight();
+            CHART.height(newChartHeight);
+        }
+        
+        WINDOW.focus(refreshChartData);
+        WINDOW.resize(updateHeights);
+        
+        WINDOW.resize();
+        refreshChartData();
     });
 }());
