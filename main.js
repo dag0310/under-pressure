@@ -15,10 +15,16 @@
             ykeys: ['ping', 'download', 'upload'],
             labels: ['SYS [mmHg]', 'DIA [mmHg]', 'Pulse [1/min]'],
             lineColors: ['rgb(234, 27, 19)', 'rgb(230, 100, 19)', 'rgb(110, 110, 245)'],
+            lineWidth: 1,
             pointSize: 0,
             smooth: false,
             resize: true,
-            continuousLine: true
+            continuousLine: true,
+            ymin: 40,
+            ymax: 160,
+            goals: [120, 80, 60],
+            goalStrokeWidth: 1,
+            goalLineColors: ['lime']
         });
         
         function round(number, decimalPlaces) {
