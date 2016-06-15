@@ -20,9 +20,5 @@ Webserver with PHP 5+
 - [Add To Homescreen](http://cubiq.org/add-to-home-screen) ([Github](https://github.com/cubiq/add-to-homescreen))
 - Icons made by [Freepik](http://www.flaticon.com/authors/freepik) from [www.flaticon.com](http://www.flaticon.com) is licensed by [Creative Commons BY 3.0](http://creativecommons.org/licenses/by/3.0/)
 
-## TODO
-- Show y-axis values in increments of 10
-- Show only a certain (limited) time range
-
 ## License
 The MIT License (MIT)
