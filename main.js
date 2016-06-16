@@ -61,6 +61,16 @@
             CHART.height(newChartHeight);
         }
         
+        FORM.on('submit', function () {
+            var now = new Date();
+            var localDateTime = new Date(now.getTime() - now.getTimezoneOffset() * 60 * 1000);
+            var localDateTimeString = localDateTime.toISOString();
+            var localDateTimeStringArray = localDateTimeString.split('T');
+            var dateTimeString = localDateTimeStringArray[0] + ' ' + localDateTimeStringArray[1].split('.')[0];
+            
+            $(this).append($('<input>', { type: 'hidden', name: 'datetime', value: dateTimeString }))
+        });
+        
         WINDOW.focus(refreshChartData);
         WINDOW.resize(updateHeights);
         
