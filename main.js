@@ -39,8 +39,6 @@
                 cache: false,
                 url: 'get_log.php'
             }).done(function(log) {
-                if (log.length === 0)
-                    alert('There are no log entries yet.');
                 var chartData = [];
                 for (var i = 0; i < log.length; i++) {
                     chartData.push({
@@ -51,9 +49,7 @@
                     });
                 }
                 chart.setData(chartData);
-            }).fail(function() {
-                alert('Log data could not be fetched :(');
-            });
+            })
         }
         
         function updateHeights() {
