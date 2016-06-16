@@ -1,8 +1,11 @@
 <!doctype html>
+<?php
+    require('constants.php');
+?>
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Under Pressure</title>
+    <title><?=APP_NAME?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -23,8 +26,8 @@
     <link rel="icon" type="image/png" href="images/icon/favicon-16x16.png" sizes="16x16">
     <link rel="manifest" href="images/icon/manifest.json">
     <link rel="shortcut icon" href="images/icon/favicon.ico">
-    <meta name="apple-mobile-web-app-title" content="Under Pressure">
-    <meta name="application-name" content="Under Pressure">
+    <meta name="apple-mobile-web-app-title" content="<?=APP_NAME?>">
+    <meta name="application-name" content="<?=APP_NAME?>">
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="images/icon/mstile-144x144.png">
     <meta name="msapplication-config" content="images/icon/browserconfig.xml">
@@ -37,11 +40,13 @@
 </head>
 <body>
     <div id="chart"></div>
+    <div id="table"></div>
     
     <form method="post" action="post_log.php">
-        <input type="number" name="sys" placeholder="SYS">
-        <input type="number" name="dia" placeholder="DIA">
-        <input type="number" name="pulse" placeholder="Pulse">
+        <input type="number" name="<?=KEY_SYS?>" placeholder="SYS">
+        <input type="number" name="<?=KEY_DIA?>" placeholder="DIA">
+        <input type="number" name="<?=KEY_PULSE?>" placeholder="Pulse">
+        <input type="hidden" name="<?=KEY_DATETIME?>">
         <br>
         <button type="submit">Log</button>
     </form>
@@ -52,5 +57,11 @@
     <script src="vendor/morris/morris.min.js"></script>
     <script src="vendor/addtohomescreen/addtohomescreen.min.js"></script>
     <script src="main.js"></script>
+    <script>
+        $(function () {
+            Main.init('<?=KEY_DATETIME?>', '<?=KEY_SYS?>', '<?=KEY_DIA?>', '<?=KEY_PULSE?>');
+            addToHomescreen();
+        });
+    </script>
 </body>
 </html>

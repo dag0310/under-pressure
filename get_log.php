@@ -1,16 +1,23 @@
 <?php
+
+require('constants.php');
+
 header('Content-Type: application/json');
 
-$rows = array_map('str_getcsv', explode("\n", trim(file_get_contents('log.csv'))));
+$log_rows = array_map('str_getcsv', explode("\n", trim(file_get_contents(STORAGE_FILEPATH))));
 
-if ($rows[0][0] === NULL) {
+if ($log_rows[0][0] === NULL) {
     echo json_encode(array());
     exit;
 }
 
-for ($i = 0; $i < sizeof($rows); $i++) {
-    $rows[$i][1] = (int) $rows[$i][1];
-    $rows[$i][2] = (int) $rows[$i][2];
-    $rows[$i][3] = (int) $rows[$i][3];
+$log_rows_size = sizeof($log_rows);
+$result = array();
+for ($i = 0; $i < $log_rows_size; $i++) {
+    $result[$i][KEY_DATETIME] =    $log_rows[$i][0];
+    $result[$i][KEY_SYS] =   (int) $log_rows[$i][1];
+    $result[$i][KEY_DIA] =   (int) $log_rows[$i][2];
+    $result[$i][KEY_PULSE] = (int) $log_rows[$i][3];
 }
-echo json_encode($rows);
+
+echo json_encode($result);

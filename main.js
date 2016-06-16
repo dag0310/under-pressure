@@ -1,19 +1,40 @@
-(function() {
+/*jshint browser: true, jquery: true*/
+/* globals addToHomescreen, Morris */
+var Main = (function () {
     'use strict';
     
-    addToHomescreen();
+    $.ajaxSetup({
+        cache: false
+    });
     
-    $(function () {
+    var publicMethods = {};
+    
+    publicMethods.init = function (jsonKeyDateTime, jsonKeySys, jsonKeyDia, jsonKeyPulse) {
         var WINDOW = $(window);
         var CHART = $('#chart');
+        var TABLE = $('#table');
         var FORM = $('form');
-        
+
+        var KEYS = {
+            dateTime: jsonKeyDateTime,
+            sys: jsonKeySys,
+            dia: jsonKeyDia,
+            pulse: jsonKeyPulse
+        };
+
+        var TEXT = {
+            timeStamp: 'Timestamp',
+            sys: 'SYS [mmHg]',
+            dia: 'DIA [mmHg]',
+            pulse: 'Pulse [1/min]'
+        };
+
         var chart = Morris.Line({
             element: 'chart',
             data: [],
-            xkey: 'dateTime',
-            ykeys: ['ping', 'download', 'upload'],
-            labels: ['SYS [mmHg]', 'DIA [mmHg]', 'Pulse [1/min]'],
+            xkey: KEYS.dateTime,
+            ykeys: [KEYS.sys, KEYS.dia, KEYS.pulse],
+            labels: [TEXT.sys, TEXT.dia, TEXT.pulse],
             lineColors: ['rgb(234, 27, 19)', 'rgb(230, 100, 19)', 'rgb(110, 110, 245)'],
             lineWidth: 1,
             pointSize: 0,
@@ -26,51 +47,59 @@
             goalStrokeWidth: 1,
             goalLineColors: ['lime']
         });
-        
-        function round(number, decimalPlaces) {
-            decimalPlaces = decimalPlaces ? decimalPlaces : 0;
-            var factor = Math.pow(10, decimalPlaces);
-            return Math.round(number * factor) / factor;
+
+        function setTableData(logData) {
+            TABLE.empty();
+
+            var table = $('<table>');
+
+            var firstRow = $('<tr>');
+            firstRow.append($('<th>', {text: TEXT.timeStamp}));
+            firstRow.append($('<th>', {text: TEXT.sys}));
+            firstRow.append($('<th>', {text: TEXT.dia}));
+            firstRow.append($('<th>', {text: TEXT.pulse}));
+            table.append(firstRow);
+
+            for (var i = 0; i < logData.length; i++) {
+                var newRow = $('<tr>');
+                newRow.append($('<td>', {text: logData[i][KEYS.dateTime]}));
+                newRow.append($('<td>', {text: logData[i][KEYS.sys]}));
+                newRow.append($('<td>', {text: logData[i][KEYS.dia]}));
+                newRow.append($('<td>', {text: logData[i][KEYS.pulse]}));
+                table.append(newRow);
+            }
+
+            TABLE.append(table);
         }
-        
-        function refreshChartData() {
-            $.ajax({
-                type: 'GET',
-                cache: false,
-                url: 'get_log.php'
-            }).done(function(log) {
-                var chartData = [];
-                for (var i = 0; i < log.length; i++) {
-                    chartData.push({
-                        dateTime: log[i][0],
-                        ping:     round(log[i][1], 0),
-                        download: round(log[i][2], 0),
-                        upload:   round(log[i][3], 0)
-                    });
-                }
-                chart.setData(chartData);
-            })
+
+        function refreshData() {
+            $.getJSON('get_log.php').done(function (logData) {
+                chart.setData(logData);
+                setTableData(JSON.parse(JSON.stringify(logData)).reverse());
+            });
         }
-        
-        function updateHeights() {
-            var newChartHeight = WINDOW.innerHeight() - FORM.innerHeight();
-            CHART.height(newChartHeight);
+
+        function refreshUI() {
+            CHART.height(WINDOW.innerHeight() - FORM.innerHeight());
+            TABLE.css('top', WINDOW.innerHeight());
         }
-        
+
         FORM.on('submit', function () {
             var now = new Date();
             var localDateTime = new Date(now.getTime() - now.getTimezoneOffset() * 60 * 1000);
-            var localDateTimeString = localDateTime.toISOString();
-            var localDateTimeStringArray = localDateTimeString.split('T');
-            var dateTimeString = localDateTimeStringArray[0] + ' ' + localDateTimeStringArray[1].split('.')[0];
+            var isoDateTimeStringNoTimeZone = localDateTime.toISOString().substr(0, 19);
+            var dateTimeStringArray = isoDateTimeStringNoTimeZone.split('T'); 
+            var dateTimeString = dateTimeStringArray[0] + ' ' + dateTimeStringArray[1];
             
-            $(this).append($('<input>', { type: 'hidden', name: 'datetime', value: dateTimeString }))
+            $(this).find('input[name="' + KEYS.dateTime + '"]').val(dateTimeString);
         });
-        
-        WINDOW.focus(refreshChartData);
-        WINDOW.resize(updateHeights);
-        
+
+        WINDOW.focus(refreshData);
+        WINDOW.resize(refreshUI);
+
         WINDOW.resize();
-        refreshChartData();
-    });
+        refreshData();
+    };
+    
+    return publicMethods;
 }());
