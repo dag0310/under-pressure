@@ -14,6 +14,7 @@ var Main = (function () {
         var $CHART = $('#chart');
         var $TABLE = $('#table');
         var $FORM = $('form');
+        var $LOADING_ICON = $('#loading-icon');
 
         var TEXT = {
             timeStamp: 'Timestamp',
@@ -66,9 +67,13 @@ var Main = (function () {
         }
 
         function refreshData() {
+            $LOADING_ICON.show();
+            
             $.getJSON(CONFIG.api.endPoints.getLog).done(function (logData) {
                 CHART.setData(logData);
                 setTableData(JSON.parse(JSON.stringify(logData)).reverse());
+            }).always(function () {
+                $LOADING_ICON.hide();
             });
         }
 
