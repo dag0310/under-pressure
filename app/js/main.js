@@ -23,13 +23,26 @@ var Main = (function () {
             pulse: 'Pulse [1/min]'
         };
 
+        var RGB_COLORS = {
+            sys: [234, 27, 19],
+            dia: [230, 100, 19],
+            pulse: [110, 110, 245]
+        };
+
+        function getRgbaColor(rgbArray, opacity) {
+            opacity = opacity || 1;
+            return 'rgba(' + rgbArray[0] + ', ' + rgbArray[1] + ', ' + rgbArray[2] + ', ' + opacity + ')';
+        }
+
+        var GOAL_OPACITY = 0.6;
+
         var CHART = Morris.Line({
             element: 'chart',
             data: [],
             xkey: CONFIG.keys.dateTime,
             ykeys: [CONFIG.keys.sys, CONFIG.keys.dia, CONFIG.keys.pulse],
             labels: [TEXT.sys, TEXT.dia, TEXT.pulse],
-            lineColors: ['rgb(234, 27, 19)', 'rgb(230, 100, 19)', 'rgb(110, 110, 245)'],
+            lineColors: [getRgbaColor(RGB_COLORS.sys), getRgbaColor(RGB_COLORS.dia), getRgbaColor(RGB_COLORS.pulse)],
             lineWidth: 1,
             pointSize: 0,
             smooth: false,
@@ -39,7 +52,11 @@ var Main = (function () {
             ymax: 160,
             goals: [120, 80, 60],
             goalStrokeWidth: 1,
-            goalLineColors: ['lime']
+            goalLineColors: [
+                getRgbaColor(RGB_COLORS.sys, GOAL_OPACITY),
+                getRgbaColor(RGB_COLORS.dia, GOAL_OPACITY),
+                getRgbaColor(RGB_COLORS.pulse, GOAL_OPACITY)
+            ]
         });
 
         function showLoadingIcon(jElement) {
