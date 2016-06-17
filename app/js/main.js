@@ -17,9 +17,9 @@ var Main = (function () {
         var $FORM = $('form');
 
         var TEXT = {
-            sys: 'SYS [mmHg]',
-            dia: 'DIA [mmHg]',
-            pulse: 'Pulse [1/min]'
+            sys: 'SYS',
+            dia: 'DIA',
+            pulse: 'Pulse'
         };
 
         var RGB_COLORS = {
@@ -75,9 +75,9 @@ var Main = (function () {
 
             var firstRow = $('<tr>');
             firstRow.append($('<th>'));
-            firstRow.append($('<th>', {text: TEXT.sys}));
-            firstRow.append($('<th>', {text: TEXT.dia}));
-            firstRow.append($('<th>', {text: TEXT.pulse}));
+            firstRow.append($('<th>', {html: TEXT.sys + '<br>[mmHg]'}));
+            firstRow.append($('<th>', {html: TEXT.dia + '<br>[mmHg]'}));
+            firstRow.append($('<th>', {html: TEXT.pulse + '<br>[1/min]'}));
             table.append(firstRow);
 
             logData.forEach(function (value) {
