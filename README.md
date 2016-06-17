@@ -1,7 +1,7 @@
 # Under Pressure
 Keep track of your blood pressure.
 
-![alt tag](images/preview.png)
+![alt tag](preview.png)
 
 ## Requirements
 Webserver with PHP 5+

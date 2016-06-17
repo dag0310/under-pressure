@@ -9,18 +9,11 @@ var Main = (function () {
     
     var publicMethods = {};
     
-    publicMethods.init = function (jsonKeyDateTime, jsonKeySys, jsonKeyDia, jsonKeyPulse) {
-        var WINDOW = $(window);
-        var CHART = $('#chart');
-        var TABLE = $('#table');
-        var FORM = $('form');
-
-        var KEYS = {
-            dateTime: jsonKeyDateTime,
-            sys: jsonKeySys,
-            dia: jsonKeyDia,
-            pulse: jsonKeyPulse
-        };
+    publicMethods.init = function (CONFIG) {
+        var $WINDOW = $(window);
+        var $CHART = $('#chart');
+        var $TABLE = $('#table');
+        var $FORM = $('form');
 
         var TEXT = {
             timeStamp: 'Timestamp',
@@ -29,11 +22,11 @@ var Main = (function () {
             pulse: 'Pulse [1/min]'
         };
 
-        var chart = Morris.Line({
+        var CHART = Morris.Line({
             element: 'chart',
             data: [],
-            xkey: KEYS.dateTime,
-            ykeys: [KEYS.sys, KEYS.dia, KEYS.pulse],
+            xkey: CONFIG.keys.dateTime,
+            ykeys: [CONFIG.keys.sys, CONFIG.keys.dia, CONFIG.keys.pulse],
             labels: [TEXT.sys, TEXT.dia, TEXT.pulse],
             lineColors: ['rgb(234, 27, 19)', 'rgb(230, 100, 19)', 'rgb(110, 110, 245)'],
             lineWidth: 1,
@@ -49,7 +42,7 @@ var Main = (function () {
         });
 
         function setTableData(logData) {
-            TABLE.empty();
+            $TABLE.empty();
 
             var table = $('<table>');
 
@@ -62,42 +55,42 @@ var Main = (function () {
 
             for (var i = 0; i < logData.length; i++) {
                 var newRow = $('<tr>');
-                newRow.append($('<td>', {text: logData[i][KEYS.dateTime]}));
-                newRow.append($('<td>', {text: logData[i][KEYS.sys]}));
-                newRow.append($('<td>', {text: logData[i][KEYS.dia]}));
-                newRow.append($('<td>', {text: logData[i][KEYS.pulse]}));
+                newRow.append($('<td>', {text: logData[i][CONFIG.keys.dateTime]}));
+                newRow.append($('<td>', {text: logData[i][CONFIG.keys.sys]}));
+                newRow.append($('<td>', {text: logData[i][CONFIG.keys.dia]}));
+                newRow.append($('<td>', {text: logData[i][CONFIG.keys.pulse]}));
                 table.append(newRow);
             }
 
-            TABLE.append(table);
+            $TABLE.append(table);
         }
 
         function refreshData() {
-            $.getJSON('get_log.php').done(function (logData) {
-                chart.setData(logData);
+            $.getJSON(CONFIG.api.endPoints.getLog).done(function (logData) {
+                CHART.setData(logData);
                 setTableData(JSON.parse(JSON.stringify(logData)).reverse());
             });
         }
 
         function refreshUI() {
-            CHART.height(WINDOW.innerHeight() - FORM.innerHeight());
-            TABLE.css('top', WINDOW.innerHeight());
+            $CHART.height($WINDOW.innerHeight() - $FORM.innerHeight());
+            $TABLE.css('top', $WINDOW.innerHeight());
         }
 
-        FORM.on('submit', function () {
+        $FORM.on('submit', function () {
             var now = new Date();
             var localDateTime = new Date(now.getTime() - now.getTimezoneOffset() * 60 * 1000);
             var isoDateTimeStringNoTimeZone = localDateTime.toISOString().substr(0, 19);
             var dateTimeStringArray = isoDateTimeStringNoTimeZone.split('T'); 
             var dateTimeString = dateTimeStringArray[0] + ' ' + dateTimeStringArray[1];
             
-            $(this).find('input[name="' + KEYS.dateTime + '"]').val(dateTimeString);
+            $(this).find('input[name="' + CONFIG.keys.dateTime + '"]').val(dateTimeString);
         });
 
-        WINDOW.focus(refreshData);
-        WINDOW.resize(refreshUI);
+        $WINDOW.focus(refreshData);
+        $WINDOW.resize(refreshUI);
 
-        WINDOW.resize();
+        $WINDOW.resize();
         refreshData();
     };
     

@@ -1,12 +1,10 @@
 <!doctype html>
-<?php
-    require('constants.php');
-?>
-<html lang="en">
+<?php require('config.php'); ?>
+<html>
 <head>
     <meta charset="utf-8">
-    <title><?=APP_NAME?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title><?=APP_NAME?></title>
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <!-- Icon -->
@@ -36,13 +34,13 @@
     <!-- Stylesheets -->
     <link rel="stylesheet" href="vendor/morris/morris.css">
     <link rel="stylesheet" href="vendor/addtohomescreen/addtohomescreen.css">
-    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
     <div id="chart"></div>
     <div id="table"></div>
     
-    <form method="post" action="post_log.php">
+    <form method="post" action="<?=API_ENDPOINTS_POSTLOG?>">
         <input type="number" name="<?=KEY_SYS?>" placeholder="SYS">
         <input type="number" name="<?=KEY_DIA?>" placeholder="DIA">
         <input type="number" name="<?=KEY_PULSE?>" placeholder="Pulse">
@@ -56,10 +54,23 @@
     <script src="vendor/raphael-min.js"></script>
     <script src="vendor/morris/morris.min.js"></script>
     <script src="vendor/addtohomescreen/addtohomescreen.min.js"></script>
-    <script src="main.js"></script>
+    <script src="js/main.js"></script>
     <script>
         $(function () {
-            Main.init('<?=KEY_DATETIME?>', '<?=KEY_SYS?>', '<?=KEY_DIA?>', '<?=KEY_PULSE?>');
+            var CONFIG = {
+                keys: {
+                    dateTime: '<?=KEY_DATETIME?>',
+                    sys: '<?=KEY_SYS?>',
+                    dia: '<?=KEY_DIA?>',
+                    pulse: '<?=KEY_PULSE?>'
+                },
+                api: {
+                    endPoints: {
+                        getLog: '<?=API_ENDPOINTS_GETLOG?>'
+                    }
+                }
+            };
+            Main.init(CONFIG);
             addToHomescreen();
         });
     </script>
