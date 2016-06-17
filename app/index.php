@@ -38,7 +38,6 @@
 </head>
 <body>
     <div id="chart"></div>
-    <div id="table"></div>
 
     <form method="post" action="<?=API_ENDPOINTS_POSTLOG?>">
         <input type="number" name="<?=KEY_SYS?>" placeholder="SYS">
@@ -48,6 +47,8 @@
         <br>
         <button type="submit">Log</button>
     </form>
+
+    <div id="table"></div>
 
     <!-- Scripts -->
     <script src="vendor/jquery.min.js"></script>
