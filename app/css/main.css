@@ -12,9 +12,8 @@ html, body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
-#loading-icon {
-    display: none;
-    position: fixed;
+.loading-icon {
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
@@ -22,7 +21,6 @@ html, body {
     background: url(../images/spinner-60x60.gif);
     background-repeat: no-repeat;
     background-position: center center;
-    background-color: rgba(0, 0, 0, 0.5);
     z-index: 9999999999;
 }
 

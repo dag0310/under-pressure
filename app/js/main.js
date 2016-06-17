@@ -10,11 +10,11 @@ let Main = (function () {
     let publicMethods = {};
 
     publicMethods.init = function (CONFIG) {
+        let loadingIconClassName = 'loading-icon';
         let $WINDOW = $(window);
         let $CHART = $('#chart');
         let $TABLE = $('#table');
         let $FORM = $('form');
-        let $LOADING_ICON = $('#loading-icon');
 
         let TEXT = {
             timeStamp: 'Timestamp',
@@ -42,6 +42,16 @@ let Main = (function () {
             goalLineColors: ['lime']
         });
 
+        function showLoadingIcon(jElement) {
+            jElement.css('position', 'relative');
+            jElement.append($('<div>', {class: loadingIconClassName}));
+        }
+
+        function hideLoadingIcon(jElement) {
+            jElement.find('.' + loadingIconClassName).remove();
+            jElement.css('position', 'initial');
+        }
+
         function setTableData(logData) {
             $TABLE.empty();
 
@@ -67,13 +77,13 @@ let Main = (function () {
         }
 
         function refreshData() {
-            $LOADING_ICON.show();
+            showLoadingIcon($CHART);
 
             $.getJSON(CONFIG.api.endPoints.getLog).done(function (logData) {
                 CHART.setData(logData);
                 setTableData(JSON.parse(JSON.stringify(logData)).reverse());
             }).always(function () {
-                $LOADING_ICON.hide();
+                hideLoadingIcon($CHART);
             });
         }
 
