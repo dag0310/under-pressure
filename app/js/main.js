@@ -17,7 +17,6 @@ var Main = (function () {
         var $FORM = $('form');
 
         var TEXT = {
-            timeStamp: 'Timestamp',
             sys: 'SYS [mmHg]',
             dia: 'DIA [mmHg]',
             pulse: 'Pulse [1/min]'
@@ -75,7 +74,7 @@ var Main = (function () {
             var table = $('<table>');
 
             var firstRow = $('<tr>');
-            firstRow.append($('<th>', {text: TEXT.timeStamp}));
+            firstRow.append($('<th>'));
             firstRow.append($('<th>', {text: TEXT.sys}));
             firstRow.append($('<th>', {text: TEXT.dia}));
             firstRow.append($('<th>', {text: TEXT.pulse}));
