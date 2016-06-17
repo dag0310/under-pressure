@@ -1,0 +1,33 @@
+{
+  "name": "under-pressure",
+  "version": "1.0.0",
+  "description": "Keep track of your blood pressure",
+  "main": "Gulpfile.js",
+  "dependencies": {
+    "gulp": "^3.9.1",
+    "gulp-jslint": "^1.0.1",
+    "gulp-util": "^3.0.7",
+    "gulp-watch": "^4.3.6"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dag0310/under-pressure.git"
+  },
+  "keywords": [
+    "blood",
+    "pressure",
+    "monitoring",
+    "blutdruck",
+    "online",
+    "webapp"
+  ],
+  "author": "Daniel Geymayer",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dag0310/under-pressure/issues"
+  },
+  "homepage": "https://github.com/dag0310/under-pressure#readme"
+}
