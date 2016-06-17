@@ -87,9 +87,8 @@ var Main = (function () {
             });
         }
 
-        function refreshUI() {
+        function resizeUI() {
             $CHART.height($WINDOW.innerHeight() - $FORM.innerHeight());
-            $TABLE.css('top', $WINDOW.innerHeight());
         }
 
         $FORM.on('submit', function () {
@@ -103,7 +102,7 @@ var Main = (function () {
         });
 
         $WINDOW.focus(refreshData);
-        $WINDOW.resize(refreshUI);
+        $WINDOW.resize(resizeUI);
 
         $WINDOW.resize();
         refreshData();

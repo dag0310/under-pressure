@@ -7,7 +7,7 @@ html, body {
     width: 100%;
     padding: 0;
     margin: 0;
-    overflow: hidden;
+    overflow-x: hidden;
     background-color: #111;
     font-family: Arial, Helvetica, sans-serif;
 }
@@ -38,11 +38,8 @@ html, body {
 
 /* TABLE VIEW */
 #table {
-    position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
-    padding-top: 15px;
+    margin: 140px 0 20px;
 }
 
 #table table {
