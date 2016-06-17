@@ -39,7 +39,7 @@
 <body>
     <div id="chart"></div>
     <div id="table"></div>
-    
+
     <form method="post" action="<?=API_ENDPOINTS_POSTLOG?>">
         <input type="number" name="<?=KEY_SYS?>" placeholder="SYS">
         <input type="number" name="<?=KEY_DIA?>" placeholder="DIA">
@@ -48,9 +48,9 @@
         <br>
         <button type="submit">Log</button>
     </form>
-    
+
     <div id="loading-icon"></div>
-    
+
     <!-- Scripts -->
     <script src="vendor/jquery.min.js"></script>
     <script src="vendor/raphael-min.js"></script>
