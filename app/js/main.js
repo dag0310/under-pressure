@@ -49,6 +49,7 @@ var Main = (function () {
             smooth: false,
             resize: true,
             continuousLine: true,
+            grid: false,
             goals: GOALS,
             goalStrokeWidth: 1,
             goalLineColors: [
