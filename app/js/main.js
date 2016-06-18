@@ -157,12 +157,12 @@ var Main = (function () {
                 var sysClass = getBloodPressureClass(bloodPressureCategories.sys, entry[CONFIG.keys.sys]);
                 var diaClass = getBloodPressureClass(bloodPressureCategories.dia, entry[CONFIG.keys.dia]);
 
-                var newRow = $('<tr>');
-                newRow.append($('<td>', {text: formatDate(new Date(entry[CONFIG.keys.dateTime].replace(' ', 'T')))}));
-                newRow.append($('<td>', {text: entry[CONFIG.keys.sys], class: sysClass}));
-                newRow.append($('<td>', {text: entry[CONFIG.keys.dia], class: diaClass}));
-                newRow.append($('<td>', {text: entry[CONFIG.keys.pulse]}));
-                table.append(newRow);
+                var logRow = $('<tr>');
+                logRow.append($('<td>', {text: formatDate(new Date(entry[CONFIG.keys.dateTime].replace(' ', 'T')))}));
+                logRow.append($('<td>', {text: entry[CONFIG.keys.sys], class: sysClass}));
+                logRow.append($('<td>', {text: entry[CONFIG.keys.dia], class: diaClass}));
+                logRow.append($('<td>', {text: entry[CONFIG.keys.pulse]}));
+                table.append(logRow);
             });
 
             $TABLE.append(table);
