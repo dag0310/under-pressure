@@ -35,7 +35,7 @@ var Main = (function () {
 
         var GOAL_OPACITY = 0.6;
 
-        var CHART = Morris.Line({
+        var MORRIS_OPTIONS = {
             element: 'chart',
             data: [],
             xkey: CONFIG.keys.dateTime,
@@ -47,8 +47,6 @@ var Main = (function () {
             smooth: false,
             resize: true,
             continuousLine: true,
-            ymin: 40,
-            ymax: 160,
             goals: [120, 80, 60],
             goalStrokeWidth: 1,
             goalLineColors: [
@@ -56,7 +54,7 @@ var Main = (function () {
                 getRgbaColor(RGB_COLORS.dia, GOAL_OPACITY),
                 getRgbaColor(RGB_COLORS.pulse, GOAL_OPACITY)
             ]
-        });
+        };
 
         function showLoadingIcon(jElement) {
             jElement.css('position', 'relative');
@@ -118,11 +116,36 @@ var Main = (function () {
             $TABLE.append(table);
         }
 
+        function getExtreme(array, extremeFunction, keys) {
+            var currentExtreme;
+            array.forEach(function (value) {
+                if (keys) {
+                    value = extremeFunction(value[keys[0]], value[keys[1]], value[keys[2]]);
+                }
+                var isNewExtreme = (extremeFunction === Math.min)
+                    ? (value < currentExtreme)
+                    : (value > currentExtreme);
+                if (currentExtreme === undefined || isNewExtreme) {
+                    currentExtreme = value;
+                }
+            });
+            return currentExtreme || 0;
+        }
+
+        function round(number, exponent, roundingFunction, base) {
+            var factor = Math.pow(base || 10, exponent || 0);
+            return roundingFunction(number * factor) / factor;
+        }
+
         function refreshData() {
             showLoadingIcon($CHART);
+            var keys = [CONFIG.keys.sys, CONFIG.keys.dia, CONFIG.keys.pulse];
 
             $.getJSON(CONFIG.api.endPoints.getLog).done(function (logData) {
-                CHART.setData(logData);
+                MORRIS_OPTIONS.ymin = round(getExtreme(logData, Math.min, keys), -1, Math.floor);
+                MORRIS_OPTIONS.ymax = round(getExtreme(logData, Math.max, keys), -1, Math.ceil);
+                Morris.Line(MORRIS_OPTIONS).setData(logData);
+
                 setTableData(JSON.parse(JSON.stringify(logData)).reverse());
             }).always(function () {
                 hideLoadingIcon($CHART);
