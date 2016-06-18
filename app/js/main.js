@@ -1,4 +1,4 @@
-/*jslint browser, this*/
+/*jslint browser, this, for*/
 /*global window, $, Morris*/
 var Main = (function () {
     'use strict';
@@ -80,11 +80,37 @@ var Main = (function () {
             firstRow.append($('<th>', {html: TEXT.pulse + '<br>[1/min]'}));
             table.append(firstRow);
 
+            var bloodPressureCategories = {
+                sys: [120, 130, 140, 160, 180],
+                dia: [80, 85, 90, 100, 110]
+            };
+            var bloodPressureClasses = [
+                'bp-optimal',
+                'bp-normal',
+                'bp-normalhigh',
+                'bp-hypertension1',
+                'bp-hypertension2',
+                'bp-hypertension3'
+            ];
+            var getBloodPressureClass = function (category, value) {
+                var idx, bloodPressureClass;
+                for (idx = category.length - 1; idx >= 0; idx -= 1) {
+                    if (value >= category[idx]) {
+                        bloodPressureClass = bloodPressureClasses[idx + 1];
+                        break;
+                    }
+                }
+                return bloodPressureClass || bloodPressureClasses[0];
+            };
+
             logData.forEach(function (value) {
+                var sysClass = getBloodPressureClass(bloodPressureCategories.sys, value[CONFIG.keys.sys]);
+                var diaClass = getBloodPressureClass(bloodPressureCategories.dia, value[CONFIG.keys.dia]);
+
                 var newRow = $('<tr>');
                 newRow.append($('<td>', {text: value[CONFIG.keys.dateTime]}));
-                newRow.append($('<td>', {text: value[CONFIG.keys.sys]}));
-                newRow.append($('<td>', {text: value[CONFIG.keys.dia]}));
+                newRow.append($('<td>', {text: value[CONFIG.keys.sys], class: sysClass}));
+                newRow.append($('<td>', {text: value[CONFIG.keys.dia], class: diaClass}));
                 newRow.append($('<td>', {text: value[CONFIG.keys.pulse]}));
                 table.append(newRow);
             });

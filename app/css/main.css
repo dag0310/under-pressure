@@ -51,6 +51,25 @@ html, body {
     padding: 1px 10px;
 }
 
+.bp-optimal {
+    color: deepskyblue;
+}
+.bp-normal {
+    color: lawngreen;
+}
+.bp-normalhigh {
+    color: mediumseagreen;
+}
+.bp-hypertension1 {
+    color: yellow;
+}
+.bp-hypertension2 {
+    color: orange;
+}
+.bp-hypertension3 {
+    color: red;
+}
+
 /* LOG FORM AREA */
 form {
     position: absolute;
