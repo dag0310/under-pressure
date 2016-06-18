@@ -99,6 +99,10 @@ var Main = (function () {
             jElement.css('position', 'initial');
         }
 
+        function getDateConsideringTimeZone(date, offsetFactor) {
+            return new Date(date.getTime() + offsetFactor * date.getTimezoneOffset() * 60 * 1000);
+        }
+
         function setTableData(logData) {
             $TABLE.empty();
 
@@ -154,11 +158,12 @@ var Main = (function () {
             table.append(averageRow);
 
             logData.forEach(function (entry) {
+                var date = getDateConsideringTimeZone(new Date(entry[CONFIG.keys.dateTime].replace(' ', 'T') + 'Z'), 1);
                 var sysClass = getBloodPressureClass(bloodPressureCategories.sys, entry[CONFIG.keys.sys]);
                 var diaClass = getBloodPressureClass(bloodPressureCategories.dia, entry[CONFIG.keys.dia]);
 
                 var logRow = $('<tr>');
-                logRow.append($('<td>', {text: formatDate(new Date(entry[CONFIG.keys.dateTime].replace(' ', 'T')))}));
+                logRow.append($('<td>', {text: formatDate(date)}));
                 logRow.append($('<td>', {text: entry[CONFIG.keys.sys], class: sysClass}));
                 logRow.append($('<td>', {text: entry[CONFIG.keys.dia], class: diaClass}));
                 logRow.append($('<td>', {text: entry[CONFIG.keys.pulse]}));
@@ -224,7 +229,7 @@ var Main = (function () {
 
         $FORM.on('submit', function () {
             var now = new Date();
-            var localDateTime = new Date(now.getTime() - now.getTimezoneOffset() * 60 * 1000);
+            var localDateTime = getDateConsideringTimeZone(now, -1);
             var isoDateTimeStringNoTimeZone = localDateTime.toISOString().substr(0, 19);
             var dateTimeStringArray = isoDateTimeStringNoTimeZone.split('T');
             var dateTimeString = dateTimeStringArray[0] + ' ' + dateTimeStringArray[1];
