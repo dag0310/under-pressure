@@ -116,13 +116,20 @@ var Main = (function () {
             $TABLE.append(table);
         }
 
-        function getExtreme(array, extremeFunction, keys) {
+        function getExtremeOfObjectsArray(objectsArray, extremeFn, keys) {
+            if (keys === undefined && objectsArray.length > 0) {
+                keys = objectsArray[0].keys();
+            }
+
             var currentExtreme;
-            array.forEach(function (value) {
-                if (keys) {
-                    value = extremeFunction(value[keys[0]], value[keys[1]], value[keys[2]]);
-                }
-                var isNewExtreme = (extremeFunction === Math.min)
+            objectsArray.forEach(function (object) {
+                var objectValues = [];
+                keys.forEach(function (objectKey) {
+                    objectValues.push(object[objectKey]);
+                });
+
+                var value = extremeFn.apply(null, objectValues);
+                var isNewExtreme = (extremeFn === Math.min)
                     ? (value < currentExtreme)
                     : (value > currentExtreme);
                 if (currentExtreme === undefined || isNewExtreme) {
@@ -142,8 +149,8 @@ var Main = (function () {
             var keys = [CONFIG.keys.sys, CONFIG.keys.dia, CONFIG.keys.pulse];
 
             $.getJSON(CONFIG.api.endPoints.getLog).done(function (logData) {
-                MORRIS_OPTIONS.ymin = round(getExtreme(logData, Math.min, keys), -1, Math.floor);
-                MORRIS_OPTIONS.ymax = round(getExtreme(logData, Math.max, keys), -1, Math.ceil);
+                MORRIS_OPTIONS.ymin = round(getExtremeOfObjectsArray(logData, Math.min, keys), -1, Math.floor);
+                MORRIS_OPTIONS.ymax = round(getExtremeOfObjectsArray(logData, Math.max, keys), -1, Math.ceil);
                 $CHART.empty();
                 Morris.Line(MORRIS_OPTIONS).setData(logData);
 
