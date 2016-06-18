@@ -24,7 +24,7 @@
             .pipe(jslint.reporter('stylish'))
             .pipe(jslint.reporter(function (results) {
                 if (results.errors.length > 0) {
-                    beeper(3);
+                    beeper();
                 }
             }));
     });
