@@ -106,9 +106,9 @@ var Main = (function () {
 
             var firstRow = $('<tr>');
             firstRow.append($('<th>'));
-            firstRow.append($('<th>', {html: TEXT.sys + '<br>[mmHg]'}));
-            firstRow.append($('<th>', {html: TEXT.dia + '<br>[mmHg]'}));
-            firstRow.append($('<th>', {html: TEXT.pulse + '<br>[1/min]'}));
+            firstRow.append($('<th>', {html: TEXT.sys}));
+            firstRow.append($('<th>', {html: TEXT.dia}));
+            firstRow.append($('<th>', {html: TEXT.pulse}));
             table.append(firstRow);
 
             var bloodPressureCategories = {
