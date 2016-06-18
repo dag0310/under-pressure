@@ -28,6 +28,8 @@ var Main = (function () {
             pulse: [110, 110, 245]
         };
 
+        var GOALS = [120, 80, 60];
+
         function getRgbaColor(rgbArray, opacity) {
             opacity = opacity || 1;
             return 'rgba(' + rgbArray[0] + ', ' + rgbArray[1] + ', ' + rgbArray[2] + ', ' + opacity + ')';
@@ -47,7 +49,7 @@ var Main = (function () {
             smooth: false,
             resize: true,
             continuousLine: true,
-            goals: [120, 80, 60],
+            goals: GOALS,
             goalStrokeWidth: 1,
             goalLineColors: [
                 getRgbaColor(RGB_COLORS.sys, GOAL_OPACITY),
@@ -144,13 +146,19 @@ var Main = (function () {
             return roundingFunction(number * factor) / factor;
         }
 
+        function getExtremeValueIncludingGoals(extremeFn, logData, keys, goals) {
+            var extremeValue = getExtremeOfObjectsArray(logData, extremeFn, keys);
+            var minValueIncludingGoals = extremeFn(extremeValue, extremeFn.apply(null, goals));
+            return minValueIncludingGoals;
+        }
+
         function refreshData() {
             showLoadingIcon($CHART);
             var keys = [CONFIG.keys.sys, CONFIG.keys.dia, CONFIG.keys.pulse];
 
             $.getJSON(CONFIG.api.endPoints.getLog).done(function (logData) {
-                MORRIS_OPTIONS.ymin = round(getExtremeOfObjectsArray(logData, Math.min, keys), -1, Math.floor);
-                MORRIS_OPTIONS.ymax = round(getExtremeOfObjectsArray(logData, Math.max, keys), -1, Math.ceil);
+                MORRIS_OPTIONS.ymin = round(getExtremeValueIncludingGoals(Math.min, logData, keys, GOALS), -1, Math.floor);
+                MORRIS_OPTIONS.ymax = round(getExtremeValueIncludingGoals(Math.max, logData, keys, GOALS), -1, Math.ceil);
                 $CHART.empty();
                 Morris.Line(MORRIS_OPTIONS).setData(logData);
 
