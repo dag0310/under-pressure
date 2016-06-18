@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "Keep track of your blood pressure",
   "main": "Gulpfile.js",
-  "dependencies": {
+  "devDependencies": {
+    "beeper": "^1.1.0",
     "gulp": "^3.9.1",
     "gulp-jslint": "^1.0.1",
     "gulp-util": "^3.0.7",
