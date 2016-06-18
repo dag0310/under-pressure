@@ -144,6 +144,7 @@ var Main = (function () {
             $.getJSON(CONFIG.api.endPoints.getLog).done(function (logData) {
                 MORRIS_OPTIONS.ymin = round(getExtreme(logData, Math.min, keys), -1, Math.floor);
                 MORRIS_OPTIONS.ymax = round(getExtreme(logData, Math.max, keys), -1, Math.ceil);
+                $CHART.empty();
                 Morris.Line(MORRIS_OPTIONS).setData(logData);
 
                 setTableData(JSON.parse(JSON.stringify(logData)).reverse());
