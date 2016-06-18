@@ -90,10 +90,10 @@ var Main = (function () {
                 'bp-hypertension2',
                 'bp-hypertension3'
             ];
-            var getBloodPressureClass = function (category, value) {
+            var getBloodPressureClass = function (categoryValues, value) {
                 var idx, bloodPressureClass;
-                for (idx = category.length - 1; idx >= 0; idx -= 1) {
-                    if (value >= category[idx]) {
+                for (idx = categoryValues.length - 1; idx >= 0; idx -= 1) {
+                    if (value >= categoryValues[idx]) {
                         bloodPressureClass = bloodPressureClasses[idx + 1];
                         break;
                     }
@@ -101,15 +101,15 @@ var Main = (function () {
                 return bloodPressureClass || bloodPressureClasses[0];
             };
 
-            logData.forEach(function (value) {
-                var sysClass = getBloodPressureClass(bloodPressureCategories.sys, value[CONFIG.keys.sys]);
-                var diaClass = getBloodPressureClass(bloodPressureCategories.dia, value[CONFIG.keys.dia]);
+            logData.forEach(function (entry) {
+                var sysClass = getBloodPressureClass(bloodPressureCategories.sys, entry[CONFIG.keys.sys]);
+                var diaClass = getBloodPressureClass(bloodPressureCategories.dia, entry[CONFIG.keys.dia]);
 
                 var newRow = $('<tr>');
-                newRow.append($('<td>', {text: value[CONFIG.keys.dateTime]}));
-                newRow.append($('<td>', {text: value[CONFIG.keys.sys], class: sysClass}));
-                newRow.append($('<td>', {text: value[CONFIG.keys.dia], class: diaClass}));
-                newRow.append($('<td>', {text: value[CONFIG.keys.pulse]}));
+                newRow.append($('<td>', {text: entry[CONFIG.keys.dateTime]}));
+                newRow.append($('<td>', {text: entry[CONFIG.keys.sys], class: sysClass}));
+                newRow.append($('<td>', {text: entry[CONFIG.keys.dia], class: diaClass}));
+                newRow.append($('<td>', {text: entry[CONFIG.keys.pulse]}));
                 table.append(newRow);
             });
 
