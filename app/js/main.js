@@ -136,7 +136,7 @@ var Main = (function () {
                     currentExtreme = value;
                 }
             });
-            return currentExtreme || 0;
+            return currentExtreme;
         }
 
         function round(number, exponent, roundingFunction, base) {
