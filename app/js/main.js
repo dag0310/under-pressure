@@ -37,6 +37,33 @@ var Main = (function () {
 
         var GOAL_OPACITY = 0.6;
 
+        function formatDate(date) {
+            var daysOfWeek, dateString;
+
+            if (String.prototype.substr.call(navigator.language || navigator.browserLanguage, 0, 2).toLowerCase() === 'de') {
+                daysOfWeek = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
+                dateString = Array.prototype.join.call([
+                    ('0' + date.getDate()).slice(-2),
+                    ('0' + (date.getMonth() + 1)).slice(-2),
+                    date.getFullYear()
+                ], '.');
+            } else {
+                daysOfWeek = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+                dateString = Array.prototype.join.call([
+                    date.getFullYear(),
+                    ('0' + (date.getMonth() + 1)).slice(-2),
+                    ('0' + date.getDate()).slice(-2)
+                ], '-');
+            }
+
+            var timeString = Array.prototype.join.call([
+                ('0' + date.getHours()).slice(-2),
+                ('0' + date.getMinutes()).slice(-2)
+            ], ':');
+
+            return daysOfWeek[date.getDay()] + ', ' + dateString + ' ' + timeString;
+        }
+
         var MORRIS_OPTIONS = {
             element: 'chart',
             data: [],
@@ -56,7 +83,10 @@ var Main = (function () {
                 getRgbaColor(RGB_COLORS.sys, GOAL_OPACITY),
                 getRgbaColor(RGB_COLORS.dia, GOAL_OPACITY),
                 getRgbaColor(RGB_COLORS.pulse, GOAL_OPACITY)
-            ]
+            ],
+            dateFormat: function (utcTimeStampInMs) {
+                return formatDate(new Date(utcTimeStampInMs));
+            }
         };
 
         function showLoadingIcon(jElement) {
@@ -109,7 +139,7 @@ var Main = (function () {
                 var diaClass = getBloodPressureClass(bloodPressureCategories.dia, entry[CONFIG.keys.dia]);
 
                 var newRow = $('<tr>');
-                newRow.append($('<td>', {text: entry[CONFIG.keys.dateTime]}));
+                newRow.append($('<td>', {text: formatDate(new Date(entry[CONFIG.keys.dateTime].replace(' ', 'T')))}));
                 newRow.append($('<td>', {text: entry[CONFIG.keys.sys], class: sysClass}));
                 newRow.append($('<td>', {text: entry[CONFIG.keys.dia], class: diaClass}));
                 newRow.append($('<td>', {text: entry[CONFIG.keys.pulse]}));

@@ -47,8 +47,11 @@ html, body {
     text-align: center;
     margin: 0 auto;
 }
-#table table td {
+#table table tr td {
     padding: 1px 10px;
+}
+#table table tr td:first-child {
+    text-align: right;
 }
 
 .bp-optimal {
