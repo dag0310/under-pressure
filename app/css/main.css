@@ -53,6 +53,12 @@ html, body {
 #table table tr td:first-child {
     text-align: right;
 }
+#table table tr.average td:first-child {
+    text-align: center;
+}
+#table table tr.average td {
+    padding: 10px 0;
+}
 
 .bp-optimal {
     color: deepskyblue;

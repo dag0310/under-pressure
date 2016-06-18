@@ -134,6 +134,25 @@ var Main = (function () {
                 return bloodPressureClass || bloodPressureClasses[0];
             };
 
+            var sumSys = 0, sumDia = 0, sumPulse = 0;
+            logData.forEach(function (entry) {
+                sumSys += entry[CONFIG.keys.sys];
+                sumDia += entry[CONFIG.keys.dia];
+                sumPulse += entry[CONFIG.keys.pulse];
+            });
+            var averageSys = sumSys / logData.length;
+            var averageDia = sumDia / logData.length;
+            var averagePulse = sumPulse / logData.length;
+            var averageSysClass = getBloodPressureClass(bloodPressureCategories.sys, averageSys);
+            var averageDiaClass = getBloodPressureClass(bloodPressureCategories.dia, averageDia);
+
+            var averageRow = $('<tr class="average">');
+            averageRow.append($('<td>', {text: 'Ø'}));
+            averageRow.append($('<td>', {text: Math.round(averageSys), class: averageSysClass}));
+            averageRow.append($('<td>', {text: Math.round(averageDia), class: averageDiaClass}));
+            averageRow.append($('<td>', {text: Math.round(averagePulse)}));
+            table.append(averageRow);
+
             logData.forEach(function (entry) {
                 var sysClass = getBloodPressureClass(bloodPressureCategories.sys, entry[CONFIG.keys.sys]);
                 var diaClass = getBloodPressureClass(bloodPressureCategories.dia, entry[CONFIG.keys.dia]);
