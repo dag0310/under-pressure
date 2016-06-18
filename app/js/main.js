@@ -106,6 +106,10 @@ var Main = (function () {
         function setTableData(logData) {
             $TABLE.empty();
 
+            if (logData.length <= 0) {
+                return;
+            }
+
             var table = $('<table>');
 
             var firstRow = $('<tr>');
