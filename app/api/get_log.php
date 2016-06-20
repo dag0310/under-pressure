@@ -5,11 +5,17 @@ require_once('authenticate.php');
 
 header('Content-Type: application/json');
 
-$log_rows = array_map('str_getcsv', explode("\n", trim(file_get_contents(STORAGE_FILEPATH))));
-
-if ($log_rows[0][0] === NULL) {
+function return_empty_result() {
     echo json_encode(array());
     exit;
+}
+
+set_error_handler('return_empty_result');
+$log_rows = array_map('str_getcsv', explode("\n", trim(file_get_contents(STORAGE_FILEPATH))));
+restore_error_handler();
+
+if ($log_rows[0][0] === NULL) {
+    return_empty_result();
 }
 
 $num_log_rows = sizeof($log_rows);
