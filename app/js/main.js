@@ -241,7 +241,7 @@ var Main = (function () {
             $(this).find('input[name="' + CONFIG.keys.dateTime + '"]').val(dateTimeString);
         });
 
-        $WINDOW.focus(refreshData);
+        $WINDOW.load(refreshData);
         $WINDOW.resize(resizeUI);
 
         $WINDOW.resize();

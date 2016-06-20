@@ -1,7 +1,7 @@
 <?php
 
 define('APP_NAME', 'Under Pressure');
-define('STORAGE_FILEPATH', '../log.csv');
+define('STORAGE_PATH', '../data/');
 
 define('KEY_DATETIME', 'dateTime');
 define('KEY_SYS', 'sys');

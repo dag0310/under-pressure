@@ -1,2 +1,4 @@
 Order allow,deny
 Allow from all
+
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]

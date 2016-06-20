@@ -1,6 +1,7 @@
 <?php
 
-require('../config.php');
+require_once('../config.php');
+require_once('authenticate.php');
 
 $redirect_path = '../';
 
