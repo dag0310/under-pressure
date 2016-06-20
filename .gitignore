@@ -1,3 +1,4 @@
 /_untracked
 /node_modules
 /app/data/users.json
+/app/data/users/**
