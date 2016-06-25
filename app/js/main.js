@@ -84,6 +84,8 @@ var Main = (function () {
                 getRgbaColor(RGB_COLORS.dia, GOAL_OPACITY),
                 getRgbaColor(RGB_COLORS.pulse, GOAL_OPACITY)
             ],
+            eventStrokeWidth: 1,
+            eventLineColors: ['rgba(255, 255, 255, 0.1)'],
             dateFormat: function (utcTimeStampInMs) {
                 return formatDate(new Date(utcTimeStampInMs));
             }
@@ -97,10 +99,6 @@ var Main = (function () {
         function hideLoadingIcon(jElement) {
             jElement.find('.' + loadingIconClassName).remove();
             jElement.css('position', 'initial');
-        }
-
-        function getDateConsideringTimeZone(date, offsetFactor) {
-            return new Date(date.getTime() + offsetFactor * date.getTimezoneOffset() * 60 * 1000);
         }
 
         function setTableData(logData) {
@@ -162,12 +160,11 @@ var Main = (function () {
             table.append(averageRow);
 
             logData.forEach(function (entry) {
-                var date = getDateConsideringTimeZone(new Date(entry[CONFIG.keys.dateTime].replace(' ', 'T') + 'Z'), 1);
                 var sysClass = getBloodPressureClass(bloodPressureCategories.sys, entry[CONFIG.keys.sys]);
                 var diaClass = getBloodPressureClass(bloodPressureCategories.dia, entry[CONFIG.keys.dia]);
 
                 var logRow = $('<tr>');
-                logRow.append($('<td>', {text: formatDate(date)}));
+                logRow.append($('<td>', {text: formatDate(new Date(entry[CONFIG.keys.dateTime]))}));
                 logRow.append($('<td>', {text: entry[CONFIG.keys.sys], class: sysClass}));
                 logRow.append($('<td>', {text: entry[CONFIG.keys.dia], class: diaClass}));
                 logRow.append($('<td>', {text: entry[CONFIG.keys.pulse]}));
@@ -211,6 +208,30 @@ var Main = (function () {
             return minValueIncludingGoals;
         }
 
+        function addDays(date, days) {
+            var newDate = new Date(date);
+            newDate.setDate(newDate.getDate() + days);
+            return newDate;
+        }
+
+        function getDayDates(logData) {
+            var dayDates = [];
+            logData.forEach(function (entry) {
+                var dateOnly = entry[CONFIG.keys.dateTime].split(' ')[0];
+                if (dayDates.indexOf(dateOnly) < 0) {
+                    dayDates.push(dateOnly);
+                }
+            });
+            var lastDate = addDays(new Date(dayDates.slice(-1)[0]), 1);
+            dayDates.push(lastDate.toISOString().split('T')[0]);
+            return dayDates;
+        }
+
+        function getNowDateAsUtc() {
+            var now = new Date();
+            return new Date(now.getTime() - now.getTimezoneOffset() * 60 * 1000);
+        }
+
         function refreshData() {
             showLoadingIcon($CHART);
             var keys = [CONFIG.keys.sys, CONFIG.keys.dia, CONFIG.keys.pulse];
@@ -218,6 +239,8 @@ var Main = (function () {
             $.getJSON(CONFIG.api.endPoints.getLog).done(function (logData) {
                 MORRIS_OPTIONS.ymin = round(getExtremeValueIncludingGoals(Math.min, logData, keys, GOALS), -1, Math.floor);
                 MORRIS_OPTIONS.ymax = round(getExtremeValueIncludingGoals(Math.max, logData, keys, GOALS), -1, Math.ceil);
+                MORRIS_OPTIONS.events = getDayDates(logData);
+
                 $CHART.empty();
                 Morris.Line(MORRIS_OPTIONS).setData(logData);
 
@@ -232,11 +255,9 @@ var Main = (function () {
         }
 
         $FORM.on('submit', function () {
-            var now = new Date();
-            var localDateTime = getDateConsideringTimeZone(now, -1);
-            var isoDateTimeStringNoTimeZone = localDateTime.toISOString().substr(0, 19);
-            var dateTimeStringArray = isoDateTimeStringNoTimeZone.split('T');
-            var dateTimeString = dateTimeStringArray[0] + ' ' + dateTimeStringArray[1];
+            var nowAsUtc = getNowDateAsUtc();
+            var isoDateTimeString = nowAsUtc.toISOString().substr(0, 19);
+            var dateTimeString = isoDateTimeString.split('T').join(' ');
 
             $(this).find('input[name="' + CONFIG.keys.dateTime + '"]').val(dateTimeString);
         });
