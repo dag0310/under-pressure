@@ -101,6 +101,62 @@ var Main = (function () {
             jElement.css('position', 'initial');
         }
 
+        var BLOOD_PRESSURE_CATEGORIES = {
+            sys: [120, 130, 140, 160, 180],
+            dia: [80, 85, 90, 100, 110]
+        };
+
+        var BLOOD_PRESSURE_CLASSES = [
+            'bp-optimal',
+            'bp-normal',
+            'bp-normalhigh',
+            'bp-hypertension1',
+            'bp-hypertension2',
+            'bp-hypertension3'
+        ];
+
+        function getBloodPressureClass(categoryValues, value) {
+            var idx, bloodPressureClass;
+            for (idx = categoryValues.length - 1; idx >= 0; idx -= 1) {
+                if (value >= categoryValues[idx]) {
+                    bloodPressureClass = BLOOD_PRESSURE_CLASSES[idx + 1];
+                    break;
+                }
+            }
+            return bloodPressureClass || BLOOD_PRESSURE_CLASSES[0];
+        }
+
+        function createLogEntryRow(sys, dia, pulse, rowClass, text) {
+            var sysClass = getBloodPressureClass(BLOOD_PRESSURE_CATEGORIES.sys, sys);
+            var diaClass = getBloodPressureClass(BLOOD_PRESSURE_CATEGORIES.dia, dia);
+            var logRow = $('<tr>', {class: rowClass});
+
+            logRow.append($('<td>', {text: text}));
+            logRow.append($('<td>', {text: Math.round(sys), class: sysClass}));
+            logRow.append($('<td>', {text: Math.round(dia), class: diaClass}));
+            logRow.append($('<td>', {text: Math.round(pulse)}));
+
+            return logRow;
+        }
+
+        function selectValuesByKey(objectArray, key) {
+            var values = [];
+            objectArray.forEach(function (object) {
+                values.push(object[key]);
+            });
+            return values;
+        }
+
+        function getSumOfArray(array) {
+            return array.reduce(function (prev, next) {
+                return prev + next;
+            });
+        }
+
+        function getAvgOfArray(array) {
+            return getSumOfArray(array) / array.length;
+        }
+
         function setTableData(logData) {
             $TABLE.empty();
 
@@ -117,58 +173,18 @@ var Main = (function () {
             firstRow.append($('<th>', {html: TEXT.pulse}));
             table.append(firstRow);
 
-            var bloodPressureCategories = {
-                sys: [120, 130, 140, 160, 180],
-                dia: [80, 85, 90, 100, 110]
-            };
-            var bloodPressureClasses = [
-                'bp-optimal',
-                'bp-normal',
-                'bp-normalhigh',
-                'bp-hypertension1',
-                'bp-hypertension2',
-                'bp-hypertension3'
-            ];
-            var getBloodPressureClass = function (categoryValues, value) {
-                var idx, bloodPressureClass;
-                for (idx = categoryValues.length - 1; idx >= 0; idx -= 1) {
-                    if (value >= categoryValues[idx]) {
-                        bloodPressureClass = bloodPressureClasses[idx + 1];
-                        break;
-                    }
-                }
-                return bloodPressureClass || bloodPressureClasses[0];
-            };
+            var sysValues = selectValuesByKey(logData, CONFIG.keys.sys);
+            var diaValues = selectValuesByKey(logData, CONFIG.keys.dia);
+            var pulseValues = selectValuesByKey(logData, CONFIG.keys.pulse);
 
-            var sumSys = 0, sumDia = 0, sumPulse = 0;
-            logData.forEach(function (entry) {
-                sumSys += entry[CONFIG.keys.sys];
-                sumDia += entry[CONFIG.keys.dia];
-                sumPulse += entry[CONFIG.keys.pulse];
-            });
-            var averageSys = sumSys / logData.length;
-            var averageDia = sumDia / logData.length;
-            var averagePulse = sumPulse / logData.length;
-            var averageSysClass = getBloodPressureClass(bloodPressureCategories.sys, averageSys);
-            var averageDiaClass = getBloodPressureClass(bloodPressureCategories.dia, averageDia);
+            table.append(createLogEntryRow(getAvgOfArray(sysValues), getAvgOfArray(diaValues), getAvgOfArray(pulseValues), 'special', 'Ø'));
+            table.append(createLogEntryRow(Math.min.apply(null, sysValues), Math.min.apply(null, diaValues), Math.min.apply(null, pulseValues), 'special', 'MIN'));
+            table.append(createLogEntryRow(Math.max.apply(null, sysValues), Math.max.apply(null, diaValues), Math.max.apply(null, pulseValues), 'special', 'MAX'));
 
-            var averageRow = $('<tr class="average">');
-            averageRow.append($('<td>', {text: 'Ø'}));
-            averageRow.append($('<td>', {text: Math.round(averageSys), class: averageSysClass}));
-            averageRow.append($('<td>', {text: Math.round(averageDia), class: averageDiaClass}));
-            averageRow.append($('<td>', {text: Math.round(averagePulse)}));
-            table.append(averageRow);
+            table.append($('<tr>', {class: 'separator'}));
 
             logData.forEach(function (entry) {
-                var sysClass = getBloodPressureClass(bloodPressureCategories.sys, entry[CONFIG.keys.sys]);
-                var diaClass = getBloodPressureClass(bloodPressureCategories.dia, entry[CONFIG.keys.dia]);
-
-                var logRow = $('<tr>');
-                logRow.append($('<td>', {text: formatDate(new Date(entry[CONFIG.keys.dateTime]))}));
-                logRow.append($('<td>', {text: entry[CONFIG.keys.sys], class: sysClass}));
-                logRow.append($('<td>', {text: entry[CONFIG.keys.dia], class: diaClass}));
-                logRow.append($('<td>', {text: entry[CONFIG.keys.pulse]}));
-                table.append(logRow);
+                table.append(createLogEntryRow(entry[CONFIG.keys.sys], entry[CONFIG.keys.dia], entry[CONFIG.keys.pulse], '', formatDate(new Date(entry[CONFIG.keys.dateTime]))));
             });
 
             $TABLE.append(table);
@@ -204,8 +220,8 @@ var Main = (function () {
 
         function getExtremeValueIncludingGoals(extremeFn, logData, keys, goals) {
             var extremeValue = getExtremeOfObjectsArray(logData, extremeFn, keys);
-            var minValueIncludingGoals = extremeFn(extremeValue, extremeFn.apply(null, goals));
-            return minValueIncludingGoals;
+            var extremeValueIncludingGoals = extremeFn(extremeValue, extremeFn.apply(null, goals));
+            return extremeValueIncludingGoals;
         }
 
         function addDays(date, days) {
