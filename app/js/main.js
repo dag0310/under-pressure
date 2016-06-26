@@ -64,6 +64,10 @@ var Main = (function () {
             return daysOfWeek[date.getUTCDay()] + ', ' + dateString + ' ' + timeString;
         }
 
+        function getLocalDateAsUtc(localDate) {
+            return new Date(localDate.getTime() - localDate.getTimezoneOffset() * 60 * 1000);
+        }
+
         var MORRIS_OPTIONS = {
             element: 'chart',
             data: [],
@@ -86,8 +90,8 @@ var Main = (function () {
             ],
             eventStrokeWidth: 1,
             eventLineColors: ['rgba(255, 255, 255, 0.1)'],
-            dateFormat: function (utcTimeStampInMs) {
-                return formatDate(new Date(utcTimeStampInMs));
+            dateFormat: function (utcTimeStampInMsAsLocal) {
+                return formatDate(getLocalDateAsUtc(new Date(utcTimeStampInMsAsLocal)));
             }
         };
 
@@ -270,11 +274,6 @@ var Main = (function () {
             return dayDates;
         }
 
-        function getNowDateAsUtc() {
-            var now = new Date();
-            return new Date(now.getTime() - now.getTimezoneOffset() * 60 * 1000);
-        }
-
         function refreshData() {
             showLoadingIcon($CHART);
             var keys = [CONFIG.keys.sys, CONFIG.keys.dia, CONFIG.keys.pulse];
@@ -298,7 +297,7 @@ var Main = (function () {
         }
 
         $FORM.on('submit', function () {
-            var nowAsUtc = getNowDateAsUtc();
+            var nowAsUtc = getLocalDateAsUtc(new Date());
             var isoDateTimeString = nowAsUtc.toISOString().substr(0, 19);
             var dateTimeString = isoDateTimeString.split('T').join(' ');
 
