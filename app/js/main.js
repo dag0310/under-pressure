@@ -262,6 +262,10 @@ var Main = (function () {
         }
 
         function getDayDates(logData) {
+            if (logData.length <= 0) {
+                return [];
+            }
+
             var dayDates = [];
             logData.forEach(function (entry) {
                 var dateOnly = entry[CONFIG.keys.dateTime].split(' ')[0];
@@ -271,6 +275,7 @@ var Main = (function () {
             });
             var lastDate = addDays(parseSpaceSeparatedDateTimeString(dayDates.slice(-1)[0]), 1);
             dayDates.push(lastDate.toISOString().split('T')[0]);
+
             return dayDates;
         }
 
