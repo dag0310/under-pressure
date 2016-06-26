@@ -43,25 +43,25 @@ var Main = (function () {
             if (String.prototype.substr.call(navigator.language || navigator.browserLanguage, 0, 2).toLowerCase() === 'de') {
                 daysOfWeek = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
                 dateString = Array.prototype.join.call([
-                    ('0' + date.getDate()).slice(-2),
-                    ('0' + (date.getMonth() + 1)).slice(-2),
-                    date.getFullYear()
+                    ('0' + date.getUTCDate()).slice(-2),
+                    ('0' + (date.getUTCMonth() + 1)).slice(-2),
+                    date.getUTCFullYear()
                 ], '.');
             } else {
                 daysOfWeek = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
                 dateString = Array.prototype.join.call([
-                    date.getFullYear(),
-                    ('0' + (date.getMonth() + 1)).slice(-2),
-                    ('0' + date.getDate()).slice(-2)
+                    date.getUTCFullYear(),
+                    ('0' + (date.getUTCMonth() + 1)).slice(-2),
+                    ('0' + date.getUTCDate()).slice(-2)
                 ], '-');
             }
 
             var timeString = Array.prototype.join.call([
-                ('0' + date.getHours()).slice(-2),
-                ('0' + date.getMinutes()).slice(-2)
+                ('0' + date.getUTCHours()).slice(-2),
+                ('0' + date.getUTCMinutes()).slice(-2)
             ], ':');
 
-            return daysOfWeek[date.getDay()] + ', ' + dateString + ' ' + timeString;
+            return daysOfWeek[date.getUTCDay()] + ', ' + dateString + ' ' + timeString;
         }
 
         var MORRIS_OPTIONS = {
@@ -152,6 +152,38 @@ var Main = (function () {
             return getSumOfArray(array) / array.length;
         }
 
+        function parseSpaceSeparatedDateTimeString(dateTimeString) {
+            var dateTimeStringArray = dateTimeString.split(' ');
+            var dateStringArray = dateTimeStringArray[0].split('-');
+            var timeString = dateTimeStringArray.length > 1
+                ? dateTimeStringArray[1]
+                : undefined;
+
+            var hours = 0, minutes = 0, seconds = 0, milliseconds = 0;
+            if (timeString !== undefined) {
+                var timeStringArray = timeString.split(':');
+                hours = parseInt(timeStringArray[0], 10);
+                minutes = parseInt(timeStringArray[1], 10);
+                var secondsArray = timeStringArray[2].split('.');
+                seconds = parseInt(secondsArray[0], 10);
+                milliseconds = secondsArray.length > 1
+                    ? parseInt(secondsArray[1], 10)
+                    : 0;
+            }
+
+            var parsedDate = new Date(Date.UTC(
+                parseInt(dateStringArray[0], 10),
+                parseInt(dateStringArray[1], 10) - 1,
+                parseInt(dateStringArray[2], 10),
+                hours,
+                minutes,
+                seconds,
+                milliseconds
+            ));
+
+            return parsedDate;
+        }
+
         function setTableData(logData) {
             $TABLE.empty();
 
@@ -179,7 +211,7 @@ var Main = (function () {
             table.append($('<tr>', {class: 'separator'}));
 
             logData.forEach(function (entry) {
-                table.append(createLogEntryRow(entry[CONFIG.keys.sys], entry[CONFIG.keys.dia], entry[CONFIG.keys.pulse], '', formatDate(new Date(entry[CONFIG.keys.dateTime]))));
+                table.append(createLogEntryRow(entry[CONFIG.keys.sys], entry[CONFIG.keys.dia], entry[CONFIG.keys.pulse], '', formatDate(parseSpaceSeparatedDateTimeString(entry[CONFIG.keys.dateTime]))));
             });
 
             $TABLE.append(table);
@@ -221,7 +253,7 @@ var Main = (function () {
 
         function addDays(date, days) {
             var newDate = new Date(date);
-            newDate.setDate(newDate.getDate() + days);
+            newDate.setDate(newDate.getUTCDate() + days);
             return newDate;
         }
 
@@ -233,7 +265,7 @@ var Main = (function () {
                     dayDates.push(dateOnly);
                 }
             });
-            var lastDate = addDays(new Date(dayDates.slice(-1)[0]), 1);
+            var lastDate = addDays(parseSpaceSeparatedDateTimeString(dayDates.slice(-1)[0]), 1);
             dayDates.push(lastDate.toISOString().split('T')[0]);
             return dayDates;
         }
