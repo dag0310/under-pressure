@@ -101,40 +101,35 @@ var Main = (function () {
             jElement.css('position', 'initial');
         }
 
-        var BLOOD_PRESSURE_CATEGORIES = {
+        var MEASUREMENT_THRESHOLDS = {
             sys: [120, 130, 140, 160, 180],
-            dia: [80, 85, 90, 100, 110]
+            dia: [80, 85, 90, 100, 110],
+            pulse: [60, 70, 85, 90, 95]
         };
 
-        var BLOOD_PRESSURE_CLASSES = [
-            'bp-optimal',
-            'bp-normal',
-            'bp-normalhigh',
-            'bp-hypertension1',
-            'bp-hypertension2',
-            'bp-hypertension3'
-        ];
+        var MEASUREMENT_THRESHOLD_CLASSES = ['th-optimal', 'th-normal', 'th-normalhigh', 'th-high1', 'th-high2', 'th-high3'];
 
-        function getBloodPressureClass(categoryValues, value) {
-            var idx, bloodPressureClass;
+        function getMeasurementThresholdClass(categoryValues, value) {
+            var idx, measurementThresholdClass;
             for (idx = categoryValues.length - 1; idx >= 0; idx -= 1) {
                 if (value >= categoryValues[idx]) {
-                    bloodPressureClass = BLOOD_PRESSURE_CLASSES[idx + 1];
+                    measurementThresholdClass = MEASUREMENT_THRESHOLD_CLASSES[idx + 1];
                     break;
                 }
             }
-            return bloodPressureClass || BLOOD_PRESSURE_CLASSES[0];
+            return measurementThresholdClass || MEASUREMENT_THRESHOLD_CLASSES[0];
         }
 
         function createLogEntryRow(sys, dia, pulse, rowClass, text) {
-            var sysClass = getBloodPressureClass(BLOOD_PRESSURE_CATEGORIES.sys, sys);
-            var diaClass = getBloodPressureClass(BLOOD_PRESSURE_CATEGORIES.dia, dia);
+            var sysClass = getMeasurementThresholdClass(MEASUREMENT_THRESHOLDS.sys, sys);
+            var diaClass = getMeasurementThresholdClass(MEASUREMENT_THRESHOLDS.dia, dia);
+            var pulseClass = getMeasurementThresholdClass(MEASUREMENT_THRESHOLDS.pulse, pulse);
             var logRow = $('<tr>', {class: rowClass});
 
             logRow.append($('<td>', {text: text}));
             logRow.append($('<td>', {text: Math.round(sys), class: sysClass}));
             logRow.append($('<td>', {text: Math.round(dia), class: diaClass}));
-            logRow.append($('<td>', {text: Math.round(pulse)}));
+            logRow.append($('<td>', {text: Math.round(pulse), class: pulseClass}));
 
             return logRow;
         }

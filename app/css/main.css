@@ -47,35 +47,38 @@ html, body {
     text-align: center;
     margin: 0 auto;
 }
+#table table tr th {
+    padding: 0 10px 10px;
+}
 #table table tr td {
-    padding: 1px 10px;
+    padding: 2px 10px;
 }
 #table table tr td:first-child {
     text-align: right;
 }
-#table table tr.average td:first-child {
+#table table tr.special td:first-child {
     text-align: center;
 }
-#table table tr.average td {
-    padding: 10px 0;
+#table table tr.separator {
+    height: 5px;
 }
 
-.bp-optimal {
+.th-optimal {
     color: deepskyblue;
 }
-.bp-normal {
+.th-normal {
     color: springgreen;
 }
-.bp-normalhigh {
+.th-normalhigh {
     color: seagreen;
 }
-.bp-hypertension1 {
+.th-high1 {
     color: yellow;
 }
-.bp-hypertension2 {
+.th-high2 {
     color: orange;
 }
-.bp-hypertension3 {
+.th-high3 {
     color: red;
 }
 
