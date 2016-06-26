@@ -57,6 +57,7 @@
     <script src="vendor/raphael-min.js"></script>
     <script src="vendor/morris/morris.min.js"></script>
     <script src="vendor/addtohomescreen/addtohomescreen.min.js"></script>
+    <script src="js/helper.js"></script>
     <script src="js/main.js"></script>
     <script>
         $(function () {
