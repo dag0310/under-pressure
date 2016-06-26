@@ -32,6 +32,7 @@
     <meta name="theme-color" content="#ffffff">
 
     <!-- Stylesheets -->
+    <link rel="stylesheet" href="vendor/jquery-toast-plugin/jquery.toast.min.css">
     <link rel="stylesheet" href="vendor/morris/morris.css">
     <link rel="stylesheet" href="vendor/addtohomescreen/addtohomescreen.css">
     <link rel="stylesheet" href="css/main.css">
@@ -52,6 +53,7 @@
 
     <!-- Scripts -->
     <script src="vendor/jquery.min.js"></script>
+    <script src="vendor/jquery-toast-plugin/jquery.toast.min.js"></script>
     <script src="vendor/raphael-min.js"></script>
     <script src="vendor/morris/morris.min.js"></script>
     <script src="vendor/addtohomescreen/addtohomescreen.min.js"></script>
