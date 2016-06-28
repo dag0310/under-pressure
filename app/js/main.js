@@ -203,8 +203,6 @@ var Main = (function () {
                 $LOG.hide();
                 $TABLE.hide();
 
-                $LOGGED_OUT_PANEL.find('input[name=username]').focus();
-
                 return;
             }
 
