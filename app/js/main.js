@@ -218,6 +218,8 @@ var Main = (function () {
 
             ajaxSetup(username, password);
 
+            $WINDOW.focus(refreshData);
+
             refreshData();
         }
 
