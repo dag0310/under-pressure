@@ -216,6 +216,8 @@ var Main = (function () {
 
             $LOGGED_IN_PANEL.find('.username').text(username);
 
+            $LOG.find('input[name=' + CONFIG.keys.sys + ']').focus();
+
             ajaxSetup(username, password);
 
             $WINDOW.focus(refreshData);
@@ -257,6 +259,8 @@ var Main = (function () {
                     text: 'Could not log :(',
                     icon: 'error'
                 });
+            }).always(function () {
+                $LOG.find('input[name=' + CONFIG.keys.sys + ']').focus();
             });
 
             return false;
