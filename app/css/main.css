@@ -3,9 +3,9 @@
     box-sizing: border-box;
 }
 
-html, body {
+body {
     width: 100%;
-    padding: 0;
+    padding: 0 0 20px;
     margin: 0;
     overflow-x: hidden;
     background-color: #111;
@@ -24,9 +24,41 @@ html, body {
     z-index: 9999999999;
 }
 
+.section {
+    margin: 0 auto;
+}
+.section + .section {
+    margin-top: 20px;
+}
+
+#chart, #log, #table {
+    display: none;
+}
+
+input[type=text], input[type=password], input[type=number] {
+    border: none;
+    font-size: 16px;
+    border-radius: 0;
+}
+
+button {
+    color: white;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    height: 36px;
+}
+button:hover {
+    background-image: linear-gradient(to bottom, #a0a0a0, #6a6a6a);
+}
+button, button:active {
+    background-image: linear-gradient(to bottom, #8b8b8b, #535353);
+}
+
 /* CHART VIEW */
 #chart {
     width: 100%;
+    margin-bottom: 10px;
 }
 
 .morris-hover.morris-default-style {
@@ -39,7 +71,6 @@ html, body {
 /* TABLE VIEW */
 #table {
     width: 100%;
-    margin: 140px 0 20px;
 }
 
 #table table {
@@ -83,38 +114,53 @@ html, body {
 }
 
 /* LOG FORM AREA */
-form {
-    position: absolute;
-    bottom: 0;
+#log {
     width: 100%;
     text-align: center;
     font-size: 0;
-    padding: 10px;
     background-color: #111;
+    padding-bottom: 30px;
 }
-form input, form button[type=submit] {
+#log input, #log button[type=submit] {
     display: inline-block;
     text-align: center;
-    border: none;
-    height: 60px;
-    font-size: 16px;
-    border-radius: 0;
 }
-form input + input {
+#log input + input {
     margin-left: 10px;
 }
-form input {
+#log input {
     color: #111;
     width: 80px;
+    height: 60px;
 }
-form button[type=submit] {
+#log button[type=submit] {
     margin-top: 10px;
-    background-color: gray;
-    color: white;
-    font-weight: bold;
     width: 260px;
-    height: 36px;
 }
-form button[type=submit]:action {
-    background-color: darkgray;
+
+/* USER AREA */
+#user {
+    color: white;
+    max-width: 260px;
+    text-align: center;
+}
+
+#user h1 {
+    margin: 0 0 10px;
+    text-align: center;
+}
+
+#user .username {
+    font-weight: bold;
+}
+
+#user input[type=text], input[type=password] {
+    display: block;
+    width: 100%;
+    padding: 0 10px;
+    height: 50px;
+}
+
+#user button {
+    width: 100%;
 }

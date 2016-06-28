@@ -40,16 +40,32 @@
 <body>
     <div id="chart"></div>
 
-    <form method="post" action="<?=API_ENDPOINTS_POSTLOG?>">
+    <form id="log" method="post" action="<?=API_ENDPOINTS_POSTLOG?>">
         <input type="number" name="<?=KEY_SYS?>" placeholder="SYS">
         <input type="number" name="<?=KEY_DIA?>" placeholder="DIA">
         <input type="number" name="<?=KEY_PULSE?>" placeholder="Pulse">
-        <input type="hidden" name="<?=KEY_DATETIME?>">
         <br>
         <button type="submit">Log</button>
     </form>
 
-    <div id="table"></div>
+    <div id="table" class="section"></div>
+
+    <div id="user" class="section">
+        <form id="logged-in-panel">
+            <h1>User area</h1>
+            Logged in user: <span class="username"></span>
+            <br><br>
+            <button type="submit">Logout</button>
+        </form>
+        <form id="logged-out-panel">
+            <h1><?=APP_NAME?></h1>
+            <input type="text" name="username" placeholder="Username">
+            <br>
+            <input type="text" name="password" placeholder="Password">
+            <br>
+            <button type="submit">Login / Register</button>
+        </form>
+    </div>
 
     <!-- Scripts -->
     <script src="vendor/jquery.min.js"></script>
@@ -70,7 +86,8 @@
                 },
                 api: {
                     endPoints: {
-                        getLog: '<?=API_ENDPOINTS_GETLOG?>'
+                        getLog: '<?=API_ENDPOINTS_GETLOG?>',
+                        postLog: '<?=API_ENDPOINTS_POSTLOG?>'
                     }
                 }
             };

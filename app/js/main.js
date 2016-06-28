@@ -3,18 +3,19 @@
 var Main = (function () {
     'use strict';
 
-    $.ajaxSetup({
-        cache: false
-    });
-
     var publicMethods = {};
 
     publicMethods.init = function (CONFIG) {
-        var loadingIconClassName = 'loading-icon';
+        var LOADING_ICON_CLASS_NAME = 'loading-icon';
+        var LOCAL_STORAGE_USERNAME = 'underpressure_username';
+        var LOCAL_STORAGE_PASSWORD = 'underpressure_password';
+
         var $WINDOW = $(window);
         var $CHART = $('#chart');
+        var $LOG = $('#log');
         var $TABLE = $('#table');
-        var $FORM = $('form');
+        var $LOGGED_OUT_PANEL = $('#logged-out-panel');
+        var $LOGGED_IN_PANEL = $('#logged-in-panel');
 
         var TEXT = {
             sys: 'SYS',
@@ -69,12 +70,22 @@ var Main = (function () {
 
         function showLoadingIcon(jElement) {
             jElement.css('position', 'relative');
-            jElement.append($('<div>', {class: loadingIconClassName}));
+            jElement.append($('<div>', {class: LOADING_ICON_CLASS_NAME}));
         }
 
         function hideLoadingIcon(jElement) {
-            jElement.find('.' + loadingIconClassName).remove();
+            jElement.find('.' + LOADING_ICON_CLASS_NAME).remove();
             jElement.css('position', 'initial');
+        }
+
+        function ajaxSetup(username, password) {
+            $.ajaxSetup({
+                async: true,
+                cache: false,
+                headers: {
+                    'Authorization': 'Basic ' + Helper.b64EncodeUnicode(username + ":" + password)
+                }
+            });
         }
 
         function getMeasurementThresholdClass(categoryValues, value) {
@@ -178,21 +189,115 @@ var Main = (function () {
         }
 
         function resizeUI() {
-            $CHART.height($WINDOW.innerHeight() - $FORM.innerHeight());
+            $CHART.height($WINDOW.innerHeight() - $LOG.innerHeight());
         }
 
-        $FORM.on('submit', function () {
+        function authenticate() {
+            var username = localStorage[LOCAL_STORAGE_USERNAME];
+            var password = localStorage[LOCAL_STORAGE_PASSWORD];
+
+            if (username === undefined || password === undefined) {
+                $LOGGED_IN_PANEL.hide();
+                $LOGGED_OUT_PANEL.show();
+                $CHART.hide();
+                $LOG.hide();
+                $TABLE.hide();
+
+                $LOGGED_OUT_PANEL.find('input[name=username]').focus();
+
+                return;
+            }
+
+            $CHART.show();
+            $LOG.show();
+            $TABLE.show();
+            $LOGGED_OUT_PANEL.hide();
+            $LOGGED_IN_PANEL.show();
+
+            $LOGGED_IN_PANEL.find('.username').text(username);
+
+            ajaxSetup(username, password);
+
+            refreshData();
+        }
+
+        $LOG.on('submit', function () {
             var nowAsUtc = Helper.getLocalDateAsUtc(new Date());
             var isoDateTimeString = nowAsUtc.toISOString().substr(0, 19);
             var dateTimeString = isoDateTimeString.split('T').join(' ');
 
-            $(this).find('input[name="' + CONFIG.keys.dateTime + '"]').val(dateTimeString);
+            var jSys = $(this).find('input[name=' + CONFIG.keys.sys + ']');
+            var jDia = $(this).find('input[name=' + CONFIG.keys.dia + ']');
+            var jPulse = $(this).find('input[name=' + CONFIG.keys.pulse + ']');
+
+            var requestData = {};
+            requestData[CONFIG.keys.sys] = jSys.val();
+            requestData[CONFIG.keys.dia] = jDia.val();
+            requestData[CONFIG.keys.pulse] = jPulse.val();
+            requestData[CONFIG.keys.dateTime] = dateTimeString;
+
+            $.post(CONFIG.api.endPoints.postLog, requestData).done(function () {
+                $.toast({
+                    position: 'top-center',
+                    heading: 'Log',
+                    text: 'Logged successfully',
+                    icon: 'success'
+                });
+
+                jSys.val('');
+                jDia.val('');
+                jPulse.val('');
+                refreshData();
+            }).fail(function () {
+                $.toast({
+                    position: 'top-center',
+                    heading: 'Log',
+                    text: 'Could not log :(',
+                    icon: 'error'
+                });
+            });
+
+            return false;
+        });
+
+        $LOGGED_OUT_PANEL.on('submit', function () {
+            var jUsername = $(this).find('input[name=username]');
+            var jPassword = $(this).find('input[name=password]');
+
+            ajaxSetup(jUsername.val(), jPassword.val());
+
+            $.getJSON(CONFIG.api.endPoints.getLog).done(function () {
+                localStorage[LOCAL_STORAGE_USERNAME] = jUsername.val();
+                localStorage[LOCAL_STORAGE_PASSWORD] = jPassword.val();
+
+                authenticate();
+            }).fail(function () {
+                jPassword.val('');
+                $.toast({
+                    position: 'top-center',
+                    heading: 'Login',
+                    text: 'Invalid credentials',
+                    icon: 'error'
+                });
+            });
+
+            return false;
+        });
+
+        $LOGGED_IN_PANEL.on('submit', function () {
+            localStorage.removeItem(LOCAL_STORAGE_USERNAME);
+            localStorage.removeItem(LOCAL_STORAGE_PASSWORD);
+
+            location.reload();
+
+            return false;
         });
 
         $WINDOW.resize(resizeUI);
 
         $WINDOW.resize();
-        refreshData();
+
+        authenticate();
     };
 
     return publicMethods;
