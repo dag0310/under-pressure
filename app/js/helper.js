@@ -1,5 +1,5 @@
 /*jslint browser, this, for*/
-/*global window*/
+/*global window, btoa*/
 var Helper = (function () {
     'use strict';
 
@@ -8,6 +8,13 @@ var Helper = (function () {
     /* --------------- */
     /* GENERAL PURPOSE */
     /* --------------- */
+
+    publicMethods.b64EncodeUnicode = function (str) {
+        // https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding#The_.22Unicode_Problem.22
+        return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (ignore, p1) {
+            return String.fromCharCode('0x' + p1);
+        }));
+    };
 
     publicMethods.round = function (number, exponent, roundingFunction, base) {
         var factor = Math.pow(base || 10, exponent || 0);
