@@ -61,7 +61,7 @@
             <h1><?=APP_NAME?></h1>
             <input type="text" name="username" placeholder="Username">
             <br>
-            <input type="text" name="password" placeholder="Password">
+            <input type="password" name="password" placeholder="Password">
             <br>
             <button type="submit">Login / Register</button>
         </form>
