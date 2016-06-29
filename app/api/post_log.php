@@ -3,7 +3,7 @@
 require_once('../config.php');
 require_once('authenticate.php');
 
-if (! is_numeric($_POST[KEY_SYS]) OR ! is_numeric($_POST[KEY_DIA]) OR ! is_numeric($_POST[KEY_PULSE])) {
+if (! is_numeric($_POST[KEY_SYS]) || ! is_numeric($_POST[KEY_DIA]) || ! is_numeric($_POST[KEY_PULSE])) {
     header('HTTP/1.1 400 Bad Request');
     exit;
 }
