@@ -17,6 +17,8 @@ var Main = (function () {
         var $LOGGED_OUT_PANEL = $('#logged-out-panel');
         var $LOGGED_IN_PANEL = $('#logged-in-panel');
 
+        var IS_MOBILE_DEVICE = Helper.isMobileDevice();
+
         var TEXT = {
             sys: 'SYS',
             dia: 'DIA',
@@ -203,6 +205,10 @@ var Main = (function () {
                 $LOG.hide();
                 $TABLE.hide();
 
+                if (!IS_MOBILE_DEVICE) {
+                    $LOGGED_OUT_PANEL.find('input[name=username]').focus();
+                }
+
                 return;
             }
 
@@ -213,6 +219,10 @@ var Main = (function () {
             $LOGGED_IN_PANEL.show();
 
             $LOGGED_IN_PANEL.find('.username').text(username);
+
+            if (!IS_MOBILE_DEVICE) {
+                $LOG.find('input[name=' + CONFIG.keys.sys + ']').focus();
+            }
 
             ajaxSetup(username, password);
 

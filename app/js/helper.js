@@ -9,6 +9,10 @@ var Helper = (function () {
     /* GENERAL PURPOSE */
     /* --------------- */
 
+    publicMethods.isMobileDevice = function () {
+        return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera\ Mini/i.test(navigator.userAgent));
+    };
+
     publicMethods.b64EncodeUnicode = function (str) {
         // https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding#The_.22Unicode_Problem.22
         return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (ignore, p1) {
