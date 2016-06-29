@@ -131,6 +131,10 @@ var Main = (function () {
 
                 tempEditRow.remove();
 
+                var inputSys = $('<input>', {type: 'text', value: self.children()[1].innerText});
+                var inputDia = $('<input>', {type: 'text', value: self.children()[2].innerText});
+                var inputPulse = $('<input>', {type: 'text', value: self.children()[3].innerText});
+
                 var btnDelete = $('<button>', {type: 'button', text: 'Delete'});
                 btnDelete.on('click', function () {
                     if (!confirm('Sure you want do delete this entry?')) {
@@ -149,12 +153,32 @@ var Main = (function () {
                     });
                 });
 
-                var inputSys = $('<input>', {type: 'text', value: self.children()[1].innerText});
-                var inputDia = $('<input>', {type: 'text', value: self.children()[2].innerText});
-                var inputPulse = $('<input>', {type: 'text', value: self.children()[3].innerText});
+                var btnSave = $('<button>', {type: 'button', text: 'Save'});
+                btnSave.on('click', function () {
+                    if (!confirm('Sure you want do save this entry?')) {
+                        return;
+                    }
+
+                    var requestData = {
+                        dateTime: self.attr(DATA_DATETIME_ATTR),
+                        sys: inputSys.val(),
+                        dia: inputDia.val(),
+                        pulse: inputPulse.val()
+                    };
+                    $.post(CONFIG.api.endPoints.putLog, requestData).done(function () {
+                        refreshData();
+                    }).fail(function () {
+                        $.toast({
+                            position: 'top-center',
+                            heading: 'Log',
+                            text: 'Could not save log entry.',
+                            icon: 'error'
+                        });
+                    });
+                });
 
                 var editRow = $('<tr>', {class: 'tempEditRow'});
-                editRow.append($('<td>').append(btnDelete));
+                editRow.append($('<td>').append(btnDelete).append(btnSave));
                 editRow.append($('<td>').append(inputSys));
                 editRow.append($('<td>').append(inputDia));
                 editRow.append($('<td>').append(inputPulse));
