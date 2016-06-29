@@ -46,7 +46,8 @@ button {
     font-weight: bold;
     border: none;
     cursor: pointer;
-    height: 36px;
+    font-size: 16px;
+    height: 45px;
 }
 button:hover {
     background-image: linear-gradient(to bottom, #a0a0a0, #6a6a6a);
