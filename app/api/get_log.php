@@ -27,14 +27,12 @@ for ($i = 0; $i < $num_log_rows; $i++) {
     $entries[$i][KEY_PULSE] = (int) $log_rows[$i][3];
 }
 
-$num_last_recorded_days = 21;
-
 $last_index = sizeof($entries) - 1;
 $last_recorded_entry = $entries[$last_index];
 $last_recorded_entry_date_str = explode(' ', $last_recorded_entry[KEY_DATETIME])[0];
 $last_recorded_entry_date = date_create($last_recorded_entry_date_str);
 $first_valid_entry_date = $last_recorded_entry_date;
-$num_days_to_subtract = $num_last_recorded_days - 1;
+$num_days_to_subtract = NUM_SHOW_LAST_RECORDED_DAYS - 1;
 date_sub($first_valid_entry_date, date_interval_create_from_date_string("$num_days_to_subtract days"));
 
 $i = $last_index;

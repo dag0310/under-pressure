@@ -78,6 +78,7 @@
     <script>
         $(function () {
             var CONFIG = {
+                numShowLastRecordedDays: <?=NUM_SHOW_LAST_RECORDED_DAYS?>,
                 keys: {
                     dateTime: '<?=KEY_DATETIME?>',
                     sys: '<?=KEY_SYS?>',

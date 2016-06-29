@@ -2,6 +2,7 @@
 
 define('APP_NAME', 'Under Pressure');
 define('STORAGE_PATH', '../data/');
+define('NUM_SHOW_LAST_RECORDED_DAYS', 21);
 
 define('KEY_DATETIME', 'dateTime');
 define('KEY_SYS', 'sys');

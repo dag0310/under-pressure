@@ -185,6 +185,20 @@ var Main = (function () {
                 Morris.Line(MORRIS_OPTIONS).setData(logData);
 
                 setTableData(JSON.parse(JSON.stringify(logData)).reverse());
+
+                if (logData.length <= 0) {
+                    var numShowLastRecordedString = CONFIG.numShowLastRecordedDays % 7 === 0
+                        ? '' + (CONFIG.numShowLastRecordedDays / 7) + ' weeks'
+                        : '' + (CONFIG.numShowLastRecordedDays) + ' days';
+
+                    $.toast({
+                        position: 'top-center',
+                        heading: 'Welcome! ❤',
+                        text: 'Data for the last recorded ' + numShowLastRecordedString + ' will be shown here as soon as you start logging.',
+                        icon: 'info',
+                        hideAfter: 15000
+                    });
+                }
             }).always(function () {
                 hideLoadingIcon($CHART);
             });
