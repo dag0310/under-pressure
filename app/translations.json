@@ -1,0 +1,114 @@
+{
+    "sys": {
+        "en": "SYS",
+        "de": "SYS"
+    },
+    "dia": {
+        "en": "DIA",
+        "de": "DIA"
+    },
+    "pulse": {
+        "en": "Pulse",
+        "de": "Puls"
+    },
+    "log": {
+        "en": "Log",
+        "de": "Aufzeichnen"
+    },
+    "user_area": {
+        "en": "User area",
+        "de": "Benutzerbereich"
+    },
+    "logged_in": {
+        "en": "Logged in",
+        "de": "Angemeldet"
+    },
+    "log_out": {
+        "en": "Log out",
+        "de": "Abmelden"
+    },
+    "username": {
+        "en": "Username",
+        "de": "Benutzername"
+    },
+    "password": {
+        "en": "Password",
+        "de": "Passwort"
+    },
+    "log_in": {
+        "en": "Log in",
+        "de": "Anmelden"
+    },
+    "register": {
+        "en": "Register",
+        "de": "Registrieren"
+    },
+    "delete": {
+        "en": "Delete",
+        "de": "Löschen"
+    },
+    "save": {
+        "en": "Save",
+        "de": "Sichern"
+    },
+    "sure_delete": {
+        "en": "Sure you want do delete this entry?",
+        "de": "Bist du dir sicher, dass du diese Aufzeichnung löschen willst?"
+    },
+    "could_not_delete": {
+        "en": "Could not delete log entry.",
+        "de": "Aufzeichnung konnte nicht gelöscht werden."
+    },
+    "sure_save": {
+        "en": "Sure you want do change this entry?",
+        "de": "Bist du dir sicher, dass du diese Aufzeichnung ändern willst?"
+    },
+    "could_not_save": {
+        "en": "Could not save log entry.",
+        "de": "Aufzeichnung konnte nicht gespeichert werden."
+    },
+    "avg": {
+        "en": "Ø",
+        "de": "Ø"
+    },
+    "min": {
+        "en": "MIN",
+        "de": "MIN"
+    },
+    "max": {
+        "en": "MAX",
+        "de": "MAX"
+    },
+    "welcome": {
+        "en": "Welcome",
+        "de": "Willkommen"
+    },
+    "welcome_text_pre": {
+        "en": "Data for the last recorded",
+        "de": "Daten für die zuletzt aufgezeichneten"
+    },
+    "welcome_text_post": {
+        "en": "will be shown here as soon as you start logging.",
+        "de": "werden hier angezeigt, sobald du mit dem Aufzeichnen begonnen hast."
+    },
+    "weeks": {
+        "en": "Weeks",
+        "de": "Wochen"
+    },
+    "days": {
+        "en": "Days",
+        "de": "Tage"
+    },
+    "logged_successfully": {
+        "en": "Logged successfully.",
+        "de": "Aufzeichnung erfolgreich."
+    },
+    "could_not_log": {
+        "en": "Could not log.",
+        "de": "Konnte nicht aufzeichnen."
+    },
+    "invalid_credentials": {
+        "en": "Invalid credentials.",
+        "de": "Ungültige Anmeldedaten."
+    }
+}

@@ -1,5 +1,18 @@
 <!doctype html>
-<?php require_once('config.php'); ?>
+<?php
+require_once('config.php');
+
+$supported_locales = array('en', 'de');
+$locale = strtolower(substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2));
+if (! in_array($locale, $supported_locales, true)) {
+    $locale = $supported_locales[0];
+}
+$translations_raw = json_decode(file_get_contents('translations.json'), true);
+$translations = array();
+foreach ($translations_raw as $key => $value) {
+    $translations[$key] = $value[$locale];
+}
+?>
 <html>
 <head>
     <meta charset="utf-8">
@@ -41,29 +54,29 @@
     <div id="chart"></div>
 
     <form id="log" method="post" action="<?=API_ENDPOINTS_POSTLOG?>">
-        <input type="number" name="<?=KEY_SYS?>" placeholder="SYS">
-        <input type="number" name="<?=KEY_DIA?>" placeholder="DIA">
-        <input type="number" name="<?=KEY_PULSE?>" placeholder="Pulse">
+        <input type="number" name="<?=KEY_SYS?>" placeholder="<?=$translations['sys']?>">
+        <input type="number" name="<?=KEY_DIA?>" placeholder="<?=$translations['dia']?>">
+        <input type="number" name="<?=KEY_PULSE?>" placeholder="<?=$translations['pulse']?>">
         <br>
-        <button type="submit">Log</button>
+        <button type="submit"><?=$translations['log']?></button>
     </form>
 
     <div id="table" class="section"></div>
 
     <div id="user" class="section">
         <form id="logged-in-panel">
-            <h1>User area</h1>
-            Logged in user: <span class="username"></span>
+            <h1><?=$translations['user_area']?></h1>
+            <?=$translations['logged_in']?>: <span class="username"></span>
             <br><br>
-            <button type="submit">Logout</button>
+            <button type="submit"><?=$translations['log_out']?></button>
         </form>
         <form id="logged-out-panel">
             <h1><?=APP_NAME?></h1>
-            <input type="text" name="username" placeholder="Username">
+            <input type="text" name="username" placeholder="<?=$translations['username']?>">
             <br>
-            <input type="password" name="password" placeholder="Password">
+            <input type="password" name="password" placeholder="<?=$translations['password']?>">
             <br>
-            <button type="submit">Login / Register</button>
+            <button type="submit"><?=$translations['log_in']?> / <?=$translations['register']?></button>
         </form>
     </div>
 
@@ -94,7 +107,9 @@
                     }
                 }
             };
-            Main.init(CONFIG);
+            var TRANSLATIONS = {<?php foreach ($translations as $key => $value) { echo "$key:'$value',"; } ?>};
+
+            Main.init(CONFIG, TRANSLATIONS);
             addToHomescreen();
         });
     </script>

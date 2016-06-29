@@ -5,7 +5,7 @@ var Main = (function () {
 
     var publicMethods = {};
 
-    publicMethods.init = function (CONFIG) {
+    publicMethods.init = function (CONFIG, TRANSLATIONS) {
         var refreshData;
 
         var LOADING_ICON_CLASS_NAME = 'loading-icon';
@@ -22,12 +22,6 @@ var Main = (function () {
         var IS_MOBILE_DEVICE = Helper.isMobileDevice();
 
         var DATA_DATETIME_ATTR = 'data-dateTime';
-
-        var TEXT = {
-            sys: 'SYS',
-            dia: 'DIA',
-            pulse: 'Pulse'
-        };
 
         var RGB_COLORS = {
             sys: [234, 27, 19],
@@ -52,7 +46,7 @@ var Main = (function () {
             data: [],
             xkey: CONFIG.keys.dateTime,
             ykeys: [CONFIG.keys.sys, CONFIG.keys.dia, CONFIG.keys.pulse],
-            labels: [TEXT.sys, TEXT.dia, TEXT.pulse],
+            labels: [TRANSLATIONS.sys, TRANSLATIONS.dia, TRANSLATIONS.pulse],
             lineColors: [Helper.getRgbaColor(RGB_COLORS.sys), Helper.getRgbaColor(RGB_COLORS.dia), Helper.getRgbaColor(RGB_COLORS.pulse)],
             lineWidth: 1,
             pointSize: 0,
@@ -89,7 +83,7 @@ var Main = (function () {
                 async: true,
                 cache: false,
                 headers: {
-                    'Authorization': 'Basic ' + Helper.b64EncodeUnicode(username + ":" + password)
+                    'Authorization': 'Basic ' + Helper.b64EncodeUnicode(username + ':' + password)
                 }
             });
         }
@@ -135,9 +129,9 @@ var Main = (function () {
                 var inputDia = $('<input>', {type: 'text', value: self.children()[2].innerText});
                 var inputPulse = $('<input>', {type: 'text', value: self.children()[3].innerText});
 
-                var btnDelete = $('<button>', {type: 'button', text: 'Delete'});
+                var btnDelete = $('<button>', {type: 'button', text: TRANSLATIONS.delete});
                 btnDelete.on('click', function () {
-                    if (!confirm('Sure you want do delete this entry?')) {
+                    if (!confirm(TRANSLATIONS.sure_delete)) {
                         return;
                     }
 
@@ -147,15 +141,15 @@ var Main = (function () {
                         $.toast({
                             position: 'top-center',
                             heading: 'Log',
-                            text: 'Could not delete log entry.',
+                            text: TRANSLATIONS.could_not_delete,
                             icon: 'error'
                         });
                     });
                 });
 
-                var btnSave = $('<button>', {type: 'button', text: 'Save'});
+                var btnSave = $('<button>', {type: 'button', text: TRANSLATIONS.save});
                 btnSave.on('click', function () {
-                    if (!confirm('Sure you want do save this entry?')) {
+                    if (!confirm(TRANSLATIONS.sure_save)) {
                         return;
                     }
 
@@ -171,7 +165,7 @@ var Main = (function () {
                         $.toast({
                             position: 'top-center',
                             heading: 'Log',
-                            text: 'Could not save log entry.',
+                            text: TRANSLATIONS.could_not_save,
                             icon: 'error'
                         });
                     });
@@ -198,18 +192,18 @@ var Main = (function () {
 
             var firstRow = $('<tr>');
             firstRow.append($('<th>'));
-            firstRow.append($('<th>', {html: TEXT.sys}));
-            firstRow.append($('<th>', {html: TEXT.dia}));
-            firstRow.append($('<th>', {html: TEXT.pulse}));
+            firstRow.append($('<th>', {html: TRANSLATIONS.sys}));
+            firstRow.append($('<th>', {html: TRANSLATIONS.dia}));
+            firstRow.append($('<th>', {html: TRANSLATIONS.pulse}));
             table.append(firstRow);
 
             var sysValues = Helper.selectValuesByKey(logData, CONFIG.keys.sys);
             var diaValues = Helper.selectValuesByKey(logData, CONFIG.keys.dia);
             var pulseValues = Helper.selectValuesByKey(logData, CONFIG.keys.pulse);
 
-            table.append(createLogEntryRow(Helper.getAvgOfArray(sysValues), Helper.getAvgOfArray(diaValues), Helper.getAvgOfArray(pulseValues), 'special', 'Ø'));
-            table.append(createLogEntryRow(Math.min.apply(null, sysValues), Math.min.apply(null, diaValues), Math.min.apply(null, pulseValues), 'special', 'MIN'));
-            table.append(createLogEntryRow(Math.max.apply(null, sysValues), Math.max.apply(null, diaValues), Math.max.apply(null, pulseValues), 'special', 'MAX'));
+            table.append(createLogEntryRow(Helper.getAvgOfArray(sysValues), Helper.getAvgOfArray(diaValues), Helper.getAvgOfArray(pulseValues), 'special', TRANSLATIONS.avg));
+            table.append(createLogEntryRow(Math.min.apply(null, sysValues), Math.min.apply(null, diaValues), Math.min.apply(null, pulseValues), 'special', TRANSLATIONS.min));
+            table.append(createLogEntryRow(Math.max.apply(null, sysValues), Math.max.apply(null, diaValues), Math.max.apply(null, pulseValues), 'special', TRANSLATIONS.max));
 
             table.append($('<tr>', {class: 'separator'}));
 
@@ -251,7 +245,6 @@ var Main = (function () {
                 currentDate = Helper.addDays(currentDate, 1);
             }
 
-
             return dayDates;
         }
 
@@ -271,13 +264,13 @@ var Main = (function () {
 
                 if (logData.length <= 0) {
                     var numShowLastRecordedString = CONFIG.numShowLastRecordedDays % 7 === 0
-                        ? '' + (CONFIG.numShowLastRecordedDays / 7) + ' weeks'
-                        : '' + (CONFIG.numShowLastRecordedDays) + ' days';
+                        ? '' + (CONFIG.numShowLastRecordedDays / 7) + ' ' + TRANSLATIONS.weeks
+                        : '' + (CONFIG.numShowLastRecordedDays) + ' ' + TRANSLATIONS.days;
 
                     $.toast({
                         position: 'top-center',
-                        heading: 'Welcome! ❤',
-                        text: 'Data for the last recorded ' + numShowLastRecordedString + ' will be shown here as soon as you start logging.',
+                        heading: TRANSLATIONS.welcome + '! ❤',
+                        text: TRANSLATIONS.welcome_text_pre + ' ' + numShowLastRecordedString + ' ' + TRANSLATIONS.welcome_text_post,
                         icon: 'info',
                         hideAfter: 15000
                     });
@@ -346,8 +339,8 @@ var Main = (function () {
             $.post(CONFIG.api.endPoints.postLog, requestData).done(function () {
                 $.toast({
                     position: 'top-center',
-                    heading: 'Log',
-                    text: 'Logged successfully',
+                    heading: TRANSLATIONS.log,
+                    text: TRANSLATIONS.logged_successfully,
                     icon: 'success'
                 });
 
@@ -358,8 +351,8 @@ var Main = (function () {
             }).fail(function () {
                 $.toast({
                     position: 'top-center',
-                    heading: 'Log',
-                    text: 'Could not log :(',
+                    heading: TRANSLATIONS.log,
+                    text: TRANSLATIONS.could_not_log,
                     icon: 'error'
                 });
             });
@@ -382,8 +375,8 @@ var Main = (function () {
                 jPassword.val('');
                 $.toast({
                     position: 'top-center',
-                    heading: 'Login',
-                    text: 'Invalid credentials',
+                    heading: TRANSLATIONS.log_in,
+                    text: TRANSLATIONS.invalid_credentials,
                     icon: 'error'
                 });
             });
