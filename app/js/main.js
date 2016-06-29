@@ -1,11 +1,13 @@
 /*jslint browser, this, for*/
-/*global window, $, Morris, Helper*/
+/*global window, $, Morris, Helper, confirm*/
 var Main = (function () {
     'use strict';
 
     var publicMethods = {};
 
     publicMethods.init = function (CONFIG) {
+        var refreshData;
+
         var LOADING_ICON_CLASS_NAME = 'loading-icon';
         var LOCAL_STORAGE_USERNAME = 'underpressure_username';
         var LOCAL_STORAGE_PASSWORD = 'underpressure_password';
@@ -18,6 +20,8 @@ var Main = (function () {
         var $LOGGED_IN_PANEL = $('#logged-in-panel');
 
         var IS_MOBILE_DEVICE = Helper.isMobileDevice();
+
+        var DATA_DATETIME_ATTR = 'data-dateTime';
 
         var TEXT = {
             sys: 'SYS',
@@ -115,6 +119,50 @@ var Main = (function () {
             return logRow;
         }
 
+        function addEventsToTable(table) {
+            table.find('tr.editable').on('click', function () {
+                var self = $(this);
+                var tempEditRow = table.find('.tempEditRow');
+
+                if (self.next().hasClass('tempEditRow')) {
+                    tempEditRow.remove();
+                    return;
+                }
+
+                tempEditRow.remove();
+
+                var btnDelete = $('<button>', {type: 'button', text: 'Delete'});
+                btnDelete.on('click', function () {
+                    if (!confirm('Sure you want do delete this entry?')) {
+                        return;
+                    }
+
+                    $.post(CONFIG.api.endPoints.deleteLog, {dateTime: self.attr(DATA_DATETIME_ATTR)}).done(function () {
+                        refreshData();
+                    }).fail(function () {
+                        $.toast({
+                            position: 'top-center',
+                            heading: 'Log',
+                            text: 'Could not delete log entry.',
+                            icon: 'error'
+                        });
+                    });
+                });
+
+                var inputSys = $('<input>', {type: 'text', value: self.children()[1].innerText});
+                var inputDia = $('<input>', {type: 'text', value: self.children()[2].innerText});
+                var inputPulse = $('<input>', {type: 'text', value: self.children()[3].innerText});
+
+                var editRow = $('<tr>', {class: 'tempEditRow'});
+                editRow.append($('<td>').append(btnDelete));
+                editRow.append($('<td>').append(inputSys));
+                editRow.append($('<td>').append(inputDia));
+                editRow.append($('<td>').append(inputPulse));
+
+                self.after(editRow);
+            });
+        }
+
         function setTableData(logData) {
             $TABLE.empty();
 
@@ -142,8 +190,15 @@ var Main = (function () {
             table.append($('<tr>', {class: 'separator'}));
 
             logData.forEach(function (entry) {
-                table.append(createLogEntryRow(entry[CONFIG.keys.sys], entry[CONFIG.keys.dia], entry[CONFIG.keys.pulse], '', Helper.formatDate(Helper.parseSpaceSeparatedDateTimeString(entry[CONFIG.keys.dateTime]))));
+                var logRow = createLogEntryRow(entry[CONFIG.keys.sys], entry[CONFIG.keys.dia], entry[CONFIG.keys.pulse], '', Helper.formatDate(Helper.parseSpaceSeparatedDateTimeString(entry[CONFIG.keys.dateTime])));
+
+                logRow.addClass('editable');
+                logRow.attr(DATA_DATETIME_ATTR, entry[CONFIG.keys.dateTime]);
+
+                table.append(logRow);
             });
+
+            addEventsToTable(table);
 
             $TABLE.append(table);
         }
@@ -172,10 +227,11 @@ var Main = (function () {
                 currentDate = Helper.addDays(currentDate, 1);
             }
 
+
             return dayDates;
         }
 
-        function refreshData() {
+        refreshData = function () {
             showLoadingIcon($CHART);
             var keys = [CONFIG.keys.sys, CONFIG.keys.dia, CONFIG.keys.pulse];
 
@@ -205,7 +261,7 @@ var Main = (function () {
             }).always(function () {
                 hideLoadingIcon($CHART);
             });
-        }
+        };
 
         function resizeUI() {
             $CHART.height($WINDOW.innerHeight() - $LOG.innerHeight());

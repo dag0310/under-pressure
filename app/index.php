@@ -88,7 +88,9 @@
                 api: {
                     endPoints: {
                         getLog: '<?=API_ENDPOINTS_GETLOG?>',
-                        postLog: '<?=API_ENDPOINTS_POSTLOG?>'
+                        postLog: '<?=API_ENDPOINTS_POSTLOG?>',
+                        putLog: '<?=API_ENDPOINTS_PUTLOG?>',
+                        deleteLog: '<?=API_ENDPOINTS_DELETELOG?>'
                     }
                 }
             };

@@ -95,6 +95,24 @@ button, button:active {
     height: 5px;
 }
 
+#table tr.editable {
+    cursor: pointer;
+}
+#table tr.editable:hover {
+    background-color: #222;
+}
+#table .tempEditRow button {
+    width: 70px;
+    height: 30px;
+    font-size: 13px;
+}
+#table .tempEditRow button + button {
+    margin-left: 10px;
+}
+#table .tempEditRow input {
+    width: 30px;
+}
+
 .th-optimal {
     color: deepskyblue;
 }
