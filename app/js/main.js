@@ -159,15 +159,18 @@ var Main = (function () {
                 return [];
             }
 
+            var firstDateString = logData[0][CONFIG.keys.dateTime].split(' ')[0];
+            var firstDate = Helper.parseSpaceSeparatedDateTimeString(firstDateString);
+
+            var lastDateString = logData.slice(-1)[0][CONFIG.keys.dateTime].split(' ')[0];
+            var lastDate = Helper.addDays(Helper.parseSpaceSeparatedDateTimeString(lastDateString), 1);
+
             var dayDates = [];
-            logData.forEach(function (entry) {
-                var dateOnly = entry[CONFIG.keys.dateTime].split(' ')[0];
-                if (dayDates.indexOf(dateOnly) < 0) {
-                    dayDates.push(dateOnly);
-                }
-            });
-            var lastDate = Helper.addDays(Helper.parseSpaceSeparatedDateTimeString(dayDates.slice(-1)[0]), 1);
-            dayDates.push(lastDate.toISOString().split('T')[0]);
+            var currentDate = Helper.addDays(firstDate, 0);
+            while (currentDate <= lastDate) {
+                dayDates.push(currentDate.toISOString().split('T')[0]);
+                currentDate = Helper.addDays(currentDate, 1);
+            }
 
             return dayDates;
         }
