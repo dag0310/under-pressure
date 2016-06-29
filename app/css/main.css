@@ -8,6 +8,7 @@ body {
     padding: 0 0 20px;
     margin: 0;
     overflow-x: hidden;
+    color: #CCC;
     background-color: #111;
     font-family: Arial, Helvetica, sans-serif;
 }
@@ -75,7 +76,6 @@ button, button:active {
 }
 
 #table table {
-    color: #CCC;
     text-align: center;
     margin: 0 auto;
 }
@@ -141,7 +141,6 @@ button, button:active {
 
 /* USER AREA */
 #user {
-    color: white;
     max-width: 260px;
     text-align: center;
 }
