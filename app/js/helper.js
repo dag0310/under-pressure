@@ -77,7 +77,7 @@ var Helper = (function () {
 
     publicMethods.addDays = function (date, days) {
         var newDate = new Date(date);
-        newDate.setDate(newDate.getUTCDate() + days);
+        newDate.setUTCDate(newDate.getUTCDate() + days);
         return newDate;
     };
 
