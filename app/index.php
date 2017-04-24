@@ -85,6 +85,7 @@ foreach ($translations_raw as $key => $value) {
     <script src="vendor/raphael-min.js"></script>
     <script src="vendor/morris/morris.min.js"></script>
     <script src="vendor/addtohomescreen/addtohomescreen.min.js"></script>
+    <script src="vendor/fastclick-1.0.6.min.js"></script>
     <script src="js/helper.js"></script>
     <script src="js/main.js"></script>
     <script>
@@ -110,6 +111,7 @@ foreach ($translations_raw as $key => $value) {
 
             Main.init(CONFIG, TRANSLATIONS);
             addToHomescreen();
+			FastClick.attach(document.body);
         });
     </script>
 </body>
