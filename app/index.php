@@ -83,7 +83,6 @@ foreach ($translations_raw as $key => $value) {
     <script src="vendor/jquery-toast-plugin/jquery.toast.min.js"></script>
     <script src="vendor/raphael-min.js"></script>
     <script src="vendor/morris/morris.min.js"></script>
-    <script src="vendor/fastclick-1.0.6.min.js"></script>
     <script src="js/helper.js"></script>
     <script src="js/main.js"></script>
     <script>
@@ -108,7 +107,6 @@ foreach ($translations_raw as $key => $value) {
             var TRANSLATIONS = {<?php foreach ($translations as $key => $value) { echo "$key:'$value',"; } ?>};
 
             Main.init(CONFIG, TRANSLATIONS);
-			FastClick.attach(document.body);
         });
     </script>
 </body>
