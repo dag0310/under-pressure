@@ -46,7 +46,6 @@ foreach ($translations_raw as $key => $value) {
     <!-- Stylesheets -->
     <link rel="stylesheet" href="vendor/jquery-toast-plugin/jquery.toast.min.css">
     <link rel="stylesheet" href="vendor/morris/morris.css">
-    <link rel="stylesheet" href="vendor/addtohomescreen/addtohomescreen.css">
     <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
@@ -84,7 +83,6 @@ foreach ($translations_raw as $key => $value) {
     <script src="vendor/jquery-toast-plugin/jquery.toast.min.js"></script>
     <script src="vendor/raphael-min.js"></script>
     <script src="vendor/morris/morris.min.js"></script>
-    <script src="vendor/addtohomescreen/addtohomescreen.min.js"></script>
     <script src="vendor/fastclick-1.0.6.min.js"></script>
     <script src="js/helper.js"></script>
     <script src="js/main.js"></script>
@@ -110,7 +108,6 @@ foreach ($translations_raw as $key => $value) {
             var TRANSLATIONS = {<?php foreach ($translations as $key => $value) { echo "$key:'$value',"; } ?>};
 
             Main.init(CONFIG, TRANSLATIONS);
-            addToHomescreen();
 			FastClick.attach(document.body);
         });
     </script>
