@@ -3,7 +3,7 @@
 require_once('config.php');
 
 $supported_locales = array('en', 'de');
-$locale = strtolower(substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2));
+$locale = strtolower(substr($_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? '', 0, 2));
 if (! in_array($locale, $supported_locales, true)) {
     $locale = $supported_locales[0];
 }
