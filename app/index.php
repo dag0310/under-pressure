@@ -21,6 +21,7 @@ foreach ($translations_raw as $key => $value) {
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <!-- Icon -->
+    <meta property="og:image" content="https://apps.geymayer.com/blutdruck/images/icon/apple-touch-icon-precomposed.png">
     <link rel="apple-touch-icon" sizes="57x57" href="images/icon/apple-touch-icon-57x57.png?v=2">
     <link rel="apple-touch-icon" sizes="60x60" href="images/icon/apple-touch-icon-60x60.png?v=2">
     <link rel="apple-touch-icon" sizes="72x72" href="images/icon/apple-touch-icon-72x72.png?v=2">
